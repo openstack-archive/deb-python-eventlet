@@ -81,13 +81,23 @@ class Hub(BaseHub):
             if seconds:
                 sleep(seconds)
             return
+
+        again = self.wait_step(seconds)
+        if again:
+            self.wait_step(0)
+
+    def wait_step(self, seconds):
+        readers = self.listeners[READ]
+        writers = self.listeners[WRITE]
+
         try:
             presult = self.do_poll(seconds)
         except (IOError, select.error) as e:
             if get_errno(e) == errno.EINTR:
-                return
+                return True
             raise
-        SYSTEM_EXCEPTIONS = self.SYSTEM_EXCEPTIONS
+        if len(presult) == 0:
+            return False
 
         if self.debug_blocking:
             self.block_detect_pre()
@@ -112,8 +122,17 @@ class Hub(BaseHub):
 
         for listener, fileno in callbacks:
             try:
-                listener.cb(fileno)
-            except SYSTEM_EXCEPTIONS:
+                if event & READ_MASK:
+                    readers.get(fileno, noop).cb(fileno)
+                if event & WRITE_MASK:
+                    writers.get(fileno, noop).cb(fileno)
+                if event & select.POLLNVAL:
+                    self.remove_descriptor(fileno)
+                    continue
+                if event & EXC_MASK:
+                    readers.get(fileno, noop).cb(fileno)
+                    writers.get(fileno, noop).cb(fileno)
+            except self.SYSTEM_EXCEPTIONS:
                 raise
             except:
                 self.squelch_exception(fileno, sys.exc_info())
@@ -121,3 +140,4 @@ class Hub(BaseHub):
 
         if self.debug_blocking:
             self.block_detect_post()
+        return True
