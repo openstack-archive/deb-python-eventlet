@@ -1,6 +1,10 @@
+import errno
 import sys
 
 from eventlet.support import greenlets
+
+
+EAGAIN_ALIASES = (errno.EAGAIN, errno.EWOULDBLOCK)
 
 
 def get_errno(exc):
@@ -14,7 +18,8 @@ def get_errno(exc):
     """
 
     try:
-        if exc.errno is not None: return exc.errno
+        if exc.errno is not None:
+            return exc.errno
     except AttributeError:
         pass
     try:

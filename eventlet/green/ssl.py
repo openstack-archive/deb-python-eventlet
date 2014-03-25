@@ -7,7 +7,7 @@ import sys
 import errno
 time = __import__('time')
 
-from eventlet.support import get_errno
+from eventlet.support import EAGAIN_ALIASES, get_errno
 from eventlet.hubs import trampoline
 from eventlet.greenio import set_nonblocking, GreenSocket, SOCKET_CLOSED, CONNECT_ERR, CONNECT_SUCCESS
 orig_socket = __import__('socket')
@@ -20,6 +20,7 @@ else:
     timeout_exc = orig_socket.timeout
 
 __patched__ = ['SSLSocket', 'wrap_socket', 'sslwrap_simple']
+
 
 class GreenSSLSocket(__ssl.SSLSocket):
     """ This is a green version of the SSLSocket class from the ssl module added
@@ -140,7 +141,7 @@ class GreenSSLSocket(__ssl.SSLSocket):
                 except orig_socket.error as e:
                     if self.act_non_blocking:
                         raise
-                    if get_errno(e) == errno.EWOULDBLOCK:
+                    if get_errno(e) in EAGAIN_ALIASES:
                         trampoline(self, write=True,
                                    timeout=self.gettimeout(), timeout_exc=timeout_exc('timed out'))
                     if get_errno(e) in SOCKET_CLOSED:
@@ -163,7 +164,7 @@ class GreenSSLSocket(__ssl.SSLSocket):
                 except orig_socket.error as e:
                     if self.act_non_blocking:
                         raise
-                    if get_errno(e) == errno.EWOULDBLOCK:
+                    if get_errno(e) in EAGAIN_ALIASES:
                         trampoline(self, read=True,
                                    timeout=self.gettimeout(), timeout_exc=timeout_exc('timed out'))
                     if get_errno(e) in SOCKET_CLOSED:
@@ -263,7 +264,7 @@ class GreenSSLSocket(__ssl.SSLSocket):
                     set_nonblocking(newsock)
                     break
                 except orig_socket.error as e:
-                    if get_errno(e) != errno.EWOULDBLOCK:
+                    if get_errno(e) not in EAGAIN_ALIASES:
                         raise
                     trampoline(self, read=True, timeout=self.gettimeout(),
                                    timeout_exc=timeout_exc('timed out'))
@@ -282,7 +283,9 @@ class GreenSSLSocket(__ssl.SSLSocket):
     def dup(self):
         raise NotImplementedError("Can't dup an ssl object")
 
+
 SSLSocket = GreenSSLSocket
+
 
 def wrap_socket(sock, *a, **kw):
     return GreenSSLSocket(sock, *a, **kw)

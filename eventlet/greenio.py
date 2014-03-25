@@ -1,4 +1,4 @@
-from eventlet.support import get_errno, six
+from eventlet.support import EAGAIN_ALIASES, get_errno, six
 from eventlet.hubs import trampoline
 BUFFER_SIZE = 4096
 
@@ -13,7 +13,7 @@ import warnings
 
 __all__ = ['GreenSocket', 'GreenPipe', 'shutdown_safe']
 
-CONNECT_ERR = set((errno.EINPROGRESS, errno.EALREADY, errno.EWOULDBLOCK))
+CONNECT_ERR = set((errno.EINPROGRESS, errno.EALREADY) + EAGAIN_ALIASES)
 CONNECT_SUCCESS = set((0, errno.EISCONN))
 if sys.platform[:3] == "win":
     CONNECT_ERR.add(errno.WSAEINVAL)   # Bug 67
@@ -53,19 +53,19 @@ def socket_accept(descriptor):
     try:
         return descriptor.accept()
     except socket.error as e:
-        if get_errno(e) == errno.EWOULDBLOCK:
+        if get_errno(e) in EAGAIN_ALIASES:
             return None
         raise
 
 
 if sys.platform[:3] == "win":
     # winsock sometimes throws ENOTCONN
-    SOCKET_BLOCKING = set((errno.EWOULDBLOCK,))
+    SOCKET_BLOCKING = set(EAGAIN_ALIASES)
     SOCKET_CLOSED = set((errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN))
 else:
     # oddly, on linux/darwin, an unconnected socket is expected to block,
     # so we treat ENOTCONN the same as EWOULDBLOCK
-    SOCKET_BLOCKING = set((errno.EWOULDBLOCK, errno.ENOTCONN))
+    SOCKET_BLOCKING = set((errno.ENOTCONN,) + EAGAIN_ALIASES)
     SOCKET_CLOSED = set((errno.ECONNRESET, errno.ESHUTDOWN, errno.EPIPE))
 
 
@@ -368,7 +368,7 @@ class _SocketDuckForFd(object):
                 data = os.read(self._fileno, buflen)
                 return data
             except OSError as e:
-                if get_errno(e) != errno.EAGAIN:
+                if get_errno(e) not in EAGAIN_ALIASES:
                     raise IOError(*e.args)
             trampoline(self, read=True)
 
@@ -379,7 +379,7 @@ class _SocketDuckForFd(object):
         try:
             total_sent = os_write(fileno, data)
         except OSError as e:
-            if get_errno(e) != errno.EAGAIN:
+            if get_errno(e) not in EAGAIN_ALIASES:
                 raise IOError(*e.args)
             total_sent = 0
         while total_sent < len_data:
@@ -387,7 +387,7 @@ class _SocketDuckForFd(object):
             try:
                 total_sent += os_write(fileno, data[total_sent:])
             except OSError as e:
-                if get_errno(e) != errno. EAGAIN:
+                if get_errno(e) not in EAGAIN_ALIASES:
                     raise IOError(*e.args)
 
     def __del__(self):
