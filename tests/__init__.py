@@ -9,9 +9,11 @@ try:
     import resource
 except ImportError:
     resource = None
+import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import unittest
 import warnings
 
@@ -305,22 +307,44 @@ def get_database_auth():
     return retval
 
 
-def run_python(path):
+def rmtree(path):
+    try:
+        shutil.rmtree(path)
+    except (IOError, OSError) as e:
+        # Reraise unless ENOENT: No such file or directory
+        # (ok if directory has already been deleted)
+        if e.errno != errno.ENOENT:
+            raise
+
+
+def run_python(path, env=None, new_tmp=False):
     if not path.endswith('.py'):
         path += '.py'
     path = os.path.abspath(path)
     dir_ = os.path.dirname(path)
+
     new_env = os.environ.copy()
     new_env['PYTHONPATH'] = os.pathsep.join(sys.path + [dir_])
-    p = subprocess.Popen(
-        [sys.executable, path],
-        env=new_env,
-        stderr=subprocess.STDOUT,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-    )
-    output, _ = p.communicate()
-    return output
+    if env:
+        new_env.update(env)
+    temp_path = tempfile.gettempdir()
+    if new_tmp:
+        temp_path = tempfile.mkdtemp(prefix='tmp-eventlet-test-')
+    new_env['TMP'] = temp_path
+
+    try:
+        p = subprocess.Popen(
+            [sys.executable, path],
+            env=new_env,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+        output, _ = p.communicate()
+        return output.decode('utf-8', 'replace')
+    finally:
+        if new_tmp:
+            rmtree(temp_path)
 
 
 certificate_file = os.path.join(os.path.dirname(__file__), 'test_server.crt')
