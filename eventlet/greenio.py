@@ -382,32 +382,29 @@ class _SocketDuckForFd(object):
         buf[:nbytes] = data
         return len(data)
 
+    @staticmethod
+    def _try_send(fd, data, sent=0, write=os.write):
+        try:
+            sent = write(fd, data)
+        except OSError as e:
+            if get_errno(e) not in SOCKET_BLOCKING:
+                raise IOError(*e.args)
+        return sent
+
     def send(self, data):
-        while True:
-            try:
-                os.write(self._fileno, data)
-            except OSError as e:
-                if get_errno(e) not in SOCKET_BLOCKING:
-                    raise IOError(*e.args)
+        sent = self._try_send(self._fileno, data)
+        if sent == 0:
             trampoline(self, write=True)
+            sent = self._try_send(self._fileno, data)
+        return sent
 
     def sendall(self, data):
         len_data = len(data)
-        os_write = os.write
         fileno = self._fileno
-        try:
-            total_sent = os_write(fileno, data)
-        except OSError as e:
-            if get_errno(e) != errno.EAGAIN:
-                raise IOError(*e.args)
-            total_sent = 0
+        total_sent = self._try_send(fileno, data)
         while total_sent < len_data:
             trampoline(self, write=True)
-            try:
-                total_sent += os_write(fileno, data[total_sent:])
-            except OSError as e:
-                if get_errno(e) != errno. EAGAIN:
-                    raise IOError(*e.args)
+            total_sent += self._try_send(fileno, data[total_sent:])
 
     def __del__(self):
         self._close()

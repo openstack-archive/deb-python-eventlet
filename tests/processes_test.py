@@ -1,10 +1,13 @@
-import sys
 import warnings
-from tests import LimitedTestCase, main, skip_on_windows
+
+import eventlet
 
 warnings.simplefilter('ignore', DeprecationWarning)
-from eventlet import processes, api
+from eventlet import processes
 warnings.simplefilter('default', DeprecationWarning)
+
+from tests import LimitedTestCase, main, skip_on_windows
+
 
 class TestEchoPool(LimitedTestCase):
     def setUp(self):
@@ -20,7 +23,7 @@ class TestEchoPool(LimitedTestCase):
             result = proc.read()
         finally:
             self.pool.put(proc)
-        self.assertEqual(result, 'hello\n')
+        self.assertEqual(result, b'hello\n')
 
     @skip_on_windows
     def test_read_eof(self):
@@ -34,14 +37,14 @@ class TestEchoPool(LimitedTestCase):
     @skip_on_windows
     def test_empty_echo(self):
         p = processes.Process('echo', ['-n'])
-        self.assertEqual('', p.read())
+        self.assertEqual(b'', p.read())
         self.assertRaises(processes.DeadProcess, p.read)
 
 
 class TestCatPool(LimitedTestCase):
     def setUp(self):
         super(TestCatPool, self).setUp()
-        api.sleep(0)
+        eventlet.sleep(0)
         self.pool = processes.ProcessPool('cat')
 
     @skip_on_windows
@@ -50,34 +53,30 @@ class TestCatPool(LimitedTestCase):
 
         proc = self.pool.get()
         try:
-            proc.write('goodbye')
+            proc.write(b'goodbye')
             proc.close_stdin()
             result = proc.read()
         finally:
             self.pool.put(proc)
 
-        self.assertEqual(result, 'goodbye')
+        self.assertEqual(result, b'goodbye')
 
     @skip_on_windows
     def test_write_to_dead(self):
-        result = None
-
         proc = self.pool.get()
         try:
-            proc.write('goodbye')
+            proc.write(b'goodbye')
             proc.close_stdin()
-            result = proc.read()
+            proc.read()
             self.assertRaises(processes.DeadProcess, proc.write, 'foo')
         finally:
             self.pool.put(proc)
 
     @skip_on_windows
     def test_close(self):
-        result = None
-
         proc = self.pool.get()
         try:
-            proc.write('hello')
+            proc.write(b'hello')
             proc.close()
             self.assertRaises(processes.DeadProcess, proc.write, 'goodbye')
         finally:
@@ -95,7 +94,7 @@ class TestDyingProcessesLeavePool(LimitedTestCase):
         try:
             try:
                 result = proc.read()
-                self.assertEqual(result, 'hello\n')
+                self.assertEqual(result, b'hello\n')
                 result = proc.read()
             except processes.DeadProcess:
                 pass

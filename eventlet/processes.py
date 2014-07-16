@@ -9,7 +9,7 @@ import os
 import signal
 
 import eventlet
-from eventlet import greenio, pools
+from eventlet import pools
 from eventlet.green import subprocess
 
 
@@ -31,7 +31,7 @@ def cooperative_wait(pobj, check_interval=0.01):
     try:
         while True:
             status = pobj.poll()
-            if status >= 0:
+            if status is not None:
                 return status
             eventlet.sleep(check_interval)
     except OSError as e:
@@ -96,7 +96,7 @@ class Process(object):
             return self.child_stdin
         raise RuntimeError("Unknown mode", mode)
 
-    def read(self, amount=None):
+    def read(self, amount=-1):
         """Reads from the stdout and stderr of the child process.
         The first call to read() will return a string; subsequent
         calls may raise a DeadProcess when EOF occurs on the pipe.
