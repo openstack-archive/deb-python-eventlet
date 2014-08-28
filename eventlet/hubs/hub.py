@@ -281,7 +281,7 @@ class BaseHub(object):
         if switch_out is not None:
             try:
                 switch_out()
-            except:
+            except Exception:
                 self.squelch_generic_exception(sys.exc_info())
         self.ensure_greenlet()
         try:
