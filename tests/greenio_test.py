@@ -8,6 +8,7 @@ import shutil
 import socket as _orig_sock
 import sys
 import tempfile
+from unittest import TestCase
 
 from nose.tools import eq_
 
@@ -611,6 +612,38 @@ class TestGreenSocket(LimitedTestCase):
         s1, s2 = socket.socketpair()
         assert select.select([], [s1], [], 0) == ([], [s1], [])
         assert select.select([], [s1], [], 0) == ([], [s1], [])
+
+
+def test_get_fileno_of_a_socket_works():
+    class DummySocket(object):
+        def fileno(self):
+            return 123
+    assert select.get_fileno(DummySocket()) == 123
+
+
+def test_get_fileno_of_an_int_works():
+    assert select.get_fileno(123) == 123
+
+
+def test_get_fileno_of_wrong_type_fails():
+    try:
+        select.get_fileno('foo')
+    except TypeError as ex:
+        assert str(ex) == 'Expected int or long, got <type \'str\'>'
+    else:
+        assert False, 'Expected TypeError not raised'
+
+
+def test_get_fileno_of_a_socket_with_fileno_returning_wrong_type_fails():
+    class DummySocket(object):
+        def fileno(self):
+            return 'foo'
+    try:
+        select.get_fileno(DummySocket())
+    except TypeError as ex:
+        assert str(ex) == 'Expected int or long, got <type \'str\'>'
+    else:
+        assert False, 'Expected TypeError not raised'
 
 
 class TestGreenPipe(LimitedTestCase):
