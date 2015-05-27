@@ -1,0 +1,18 @@
+Description: Always enforce TLSv1
+ Upstream allows SSLv23, but we don't want this, we want TLSv1 always, as
+ we shouldn't trust lower types of crypto.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: not-needed
+Last-Update: 2015-05-21
+
+--- python-eventlet-0.17.3.orig/eventlet/convenience.py
++++ python-eventlet-0.17.3/eventlet/convenience.py
+@@ -139,7 +139,7 @@ except ImportError:
+                           do_handshake_on_connect=True,
+                           suppress_ragged_eofs=True, ciphers=None):
+             # theoretically the ssl_version could be respected in this line
+-            context = SSL.Context(SSL.SSLv23_METHOD)
++            context = SSL.Context(SSL.TLSv1_METHOD)
+             if certfile is not None:
+                 context.use_certificate_file(certfile)
+             if keyfile is not None:

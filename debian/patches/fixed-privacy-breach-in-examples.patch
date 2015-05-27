@@ -1,0 +1,30 @@
+Description: Fixed privacy breach in examples
+ Upstream is referencing external websites, we don't allow this.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2015-05-27
+
+--- python-eventlet-0.17.4.orig/examples/websocket.html
++++ python-eventlet-0.17.4/examples/websocket.html
+@@ -3,8 +3,8 @@
+ <head>
+ <!-- idea and code swiped from 
+ http://assorted.svn.sourceforge.net/viewvc/assorted/real-time-plotter/trunk/src/rtp.html?view=markup -->
+-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+-<script src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
++<script src="jquery.min.js"></script>
++<script src="jquery.flot.js"></script>
+ <script>
+ window.onload = function() {
+     var data = {};
+--- python-eventlet-0.17.4.orig/examples/websocket_chat.html
++++ python-eventlet-0.17.4/examples/websocket_chat.html
+@@ -1,7 +1,7 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
++<script src="jquery.min.js"></script>
+ <script>
+ window.onload = function() {
+   var data = {};

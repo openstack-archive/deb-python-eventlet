@@ -1,0 +1,228 @@
+python-eventlet (0.17.4-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Switched to PKG OpenStack <openstack-devel@lists.alioth.debian.org> team:
+    - Updated Maintainer:.
+    - Fixed VCS URLs (now using Git).
+    - Added openstack-pkg-tools as build-depends.
+    - Filled upstream VCS URL in debian/rules.
+  * Updated debian/copyright.
+  * Added dh-python as build-depends.
+  * Ran wrap-and-sort -t -a.
+  * Removed version for python-greenlet build-depends (the required version is
+    even available in Wheezy, and Jessie is out...).
+  * Removed privacy breach in example/websocket*.html
+  * Removed duplicate doc-base registration.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 27 May 2015 14:01:28 +0200
+
+python-eventlet (0.17.3-4) unstable; urgency=medium
+
+  * Enforce default protocol to be TLSv1 and not SSLv23.
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 21 May 2015 17:20:12 +0000
+
+python-eventlet (0.17.3-3) unstable; urgency=medium
+
+  * Enforce TLSv1 always, instead of the more permissive SSLv23.
+  * Standards-Version bumped to 3.9.6.
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 21 May 2015 17:09:29 +0000
+
+python-eventlet (0.17.3-2) unstable; urgency=medium
+
+  * Activates --with python3 which was missing.
+
+ -- Thomas Goirand <zigo@debian.org>  Sat, 09 May 2015 20:58:47 +0000
+
+python-eventlet (0.17.3-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Uploading to unstable.
+  * Added Python 3 package, since upstream has it now.
+
+ -- Thomas Goirand <zigo@debian.org>  Sun, 08 Feb 2015 12:34:57 +0000
+
+python-eventlet (0.15.2-1) experimental; urgency=medium
+
+  * Team upload.
+  * Added myself as uploader.
+  * New upstream release (Closes: #718036).
+  * Uploading to experimental just before the freeze.
+  * Simplified sphinx-build doc building process.
+  * Refreshed patches.
+  * Using a quilt patch to "unvendorize" mock.py, instead of using
+    debian/rules hacks.
+  * Using extend-diff-ignore to ignore egg-info changes instead of debian/rules
+    hacks. This makes it easier to produce quilt patches.
+  * Ran wrap-and-sort.
+  * Removed now useless X-Python-Version: >= 2.6.
+  * Standards-Version is now 3.9.5.
+
+ -- Thomas Goirand <zigo@debian.org>  Sun, 07 Sep 2014 14:53:19 +0000
+
+python-eventlet (0.13.0-1) unstable; urgency=low
+
+  [ Stefano Rivera ]
+  * Re-add entry for 0.9.16-3 to the changelog, it was accidentally dropped.
+  * Re-apply Uploaders changes from 0.9.16-3 that were lost.
+
+  [ Thomas Goirand ]
+  * New upstream release.
+  * Patches doc to avoid FTBFS.
+  * Allow the unit test to fail, because we have a "test is too long" error.
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 09 Sep 2013 08:23:05 +0000
+
+python-eventlet (0.12.1-2) unstable; urgency=low
+
+  [ Jakub Wilk ]
+  * Use canonical URIs for Vcs-* fields.
+
+  [ Thomas Goirand ]
+  * Uploading to sid.
+  * Added rm -rf build in the clean target to be able to rebuild twice.
+  * Removes a failing assert in tests.patcher_test.Threading.
+
+ -- Thomas Goirand <zigo@debian.org>  Sat, 11 May 2013 03:18:49 +0000
+
+python-eventlet (0.12.1-1) experimental; urgency=low
+
+  * New upstream release, still upload to experimental.
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.hu>  Sat, 02 Mar 2013 18:05:59 +0100
+
+python-eventlet (0.12.0-1) experimental; urgency=low
+
+  * New upstream version.
+  * Uploading to experimental during the freeze.
+  * X-Python-Version now >= 2.6.
+  * Now using compat and debhelper 9.
+  * Requires python-all (>= 2.6.6-3~).
+  * Drops retry-on-timeout and threading-leak patches no longer needed.
+  * Adds Ubuntu patch for disabling failing test.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 22 Feb 2013 07:25:50 +0000
+
+python-eventlet (0.9.16-3) unstable; urgency=low
+
+  * New maintainer (closes: #685319).
+
+  [ Michael Gilbert ]
+  * Depend python-greenlet >= 0.3.1-2.1, which provides the needed egg-info
+    file fixing a build failure (closes: #684852).
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.hu>  Sat, 17 Nov 2012 14:16:24 +0100
+
+python-eventlet (0.9.16-2) unstable; urgency=low
+
+  [ Soren Hansen ]
+  * Add myself to Uploaders.
+
+  [ Stefano Rivera ]
+  * Use dh_sphinxdoc.
+    - Bump python-sphinx Build-Depends.
+    - Remove dh_installdocs override.
+    - Don't manually symlink jquery.js to libjs-jquery.
+  * Don't compress Sphinx _sources.
+  * Include examples.
+  * Apply upstream threading related memory leak patch (Closes: #661781)
+  * Bump Standards-Version to 3.9.3, no changes needed.
+  * Update machine-readable copyright format to 1.0.
+
+ -- Stefano Rivera <stefanor@debian.org>  Wed, 21 Mar 2012 17:31:35 +0200
+
+python-eventlet (0.9.16-1) unstable; urgency=low
+
+  * Team upload.
+  * New upstream release.
+  * Dropped reuseaddr.patch: Included upstream.
+
+ -- Soren Hansen <soren@ubuntu.com>  Wed, 08 Jun 2011 15:13:04 +0200
+
+python-eventlet (0.9.15-1) unstable; urgency=low
+
+  * New upstream release.
+    - Drop all patches, accepted upstream.
+  * Correct DEP3 headers (first line of Description is the subject)
+  * Bump Standards-Version to 3.9.2, no changes needed.
+  * Drop Breaks: ${python:Breaks}, no longer used by dh_python2.
+  * debian/copyright: Update to DEP5 Format r174.
+  * Restore doc/modules/zmq.rst and BD on Sphinx 1.0.
+  * reuseaddr.patch: The logic for deciding whether to use SO_REUSEADDR was
+    inverted.
+  * retry-on-timeout.patch: If an operation times out, try one last time.
+    (LP: #771512)
+
+ -- Stefano Rivera <stefanor@debian.org>  Thu, 02 Jun 2011 16:18:16 +0200
+
+python-eventlet (0.9.14-1) unstable; urgency=low
+
+  * Initial release in Debian. (Closes: #532140)
+    - Maintainer is Debian Python Modules team.
+    - Add myself and Monty to Uploaders.
+    - Add Vcs entries.
+  * Change architecture to all, this is a pure-Python module.
+    - Build-Depend on python-all.
+  * Bump debhelper compat and Build-Depend to 8.
+  * Drop unnecessary article from Description.
+  * Switch to dh_python2.
+    - Drop pycompat, deprecated.
+    - Use X-Python-Version instead of pyversions. Bump python-all Build-Depend
+      to 2.6.5-13~.
+    - Breaks: ${python:Breaks}.
+    - Let dh_python2 determine Python dependencies.
+  * Run test suite during build.
+    - Add Build-Depends on python-httplib2, python-nose, python-openssl and
+      python-zmq.
+    - disable-psycopg-patcher-test.patch: Use the postgres_requirement
+      function from tests.db_pool_test in tests.patcher_psycopg_test, to skip
+      unless Postgres is available.
+  * Build Sphinx documentation.
+    - Drop doc/modules/zmq.rst, it isn't used and requires Sphinx 1.0.
+  * Include README.twisted.
+  * Use python-mock instead of bundled module.
+  * Update copyright to the latest format, and rework to group by licence.
+    Include all BSD variants present.
+  * Drop postinst, not of interest to Debian. Ubuntu can drop it after natty.
+
+ -- Stefano Rivera <stefanor@debian.org>  Sun, 27 Feb 2011 14:20:43 +0200
+
+python-eventlet (0.9.14-0ubuntu2) natty; urgency=low
+
+  * Clean up left over .pyc files.
+
+ -- Soren Hansen <soren@ubuntu.com>  Mon, 14 Feb 2011 15:18:58 +0100
+
+python-eventlet (0.9.14-0ubuntu1) natty; urgency=low
+
+  * New upstream release
+  * wrap-greenpipe.patch:
+    - Stop eventlet's subprocess module from attempting wrap GreenPipe
+      instances in another layer of GreenPipe.
+
+ -- Soren Hansen <soren@ubuntu.com>  Mon, 14 Feb 2011 11:36:08 +0100
+
+python-eventlet (0.9.13-0ubuntu1) natty; urgency=low
+
+  * New upstream release
+
+ -- Bhavani Shankar <bhavi@ubuntu.com>  Sun, 31 Oct 2010 20:28:03 +0530
+
+python-eventlet (0.9.12-0ubuntu2) maverick; urgency=low
+
+  * Add dependency on python-greenlet (LP: #657047)
+
+ -- Soren Hansen <soren@ubuntu.com>  Fri, 08 Oct 2010 21:49:53 +0200
+
+python-eventlet (0.9.12-0ubuntu1) maverick; urgency=low
+
+  * New upstream release. (FFe: LP: #645899)
+
+ -- Soren Hansen <soren@ubuntu.com>  Tue, 28 Sep 2010 21:20:32 +0200
+
+python-eventlet (0.9.10-0ubuntu1) maverick; urgency=low
+
+  * Initial upload to Ubuntu. (FFe: LP: #620368)
+
+ -- Soren Hansen <soren@ubuntu.com>  Mon, 23 Aug 2010 08:54:30 +0200

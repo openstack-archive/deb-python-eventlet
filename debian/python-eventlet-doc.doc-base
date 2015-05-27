@@ -1,0 +1,9 @@
+Document: eventlet
+Title: Eventlet Documentation
+Author: The Eventlet Contributors
+Abstract: concurrent networking library for Python
+Section: Programming/Python
+
+Format: HTML
+Index: /usr/share/doc/python-eventlet-doc/html/index.html
+Files: /usr/share/doc/python-eventlet-doc/html/*

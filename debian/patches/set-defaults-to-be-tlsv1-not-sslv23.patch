@@ -1,0 +1,17 @@
+Description: Do not use SSLv23 by default, but TLSv1
+ Default protocol should really be TLSv1 and not SSLv23.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2015-05-21
+
+--- python-eventlet-0.17.3.orig/eventlet/green/ssl.py
++++ python-eventlet-0.17.3/eventlet/green/ssl.py
+@@ -46,7 +46,7 @@ class GreenSSLSocket(_original_sslsocket
+ 
+     def __init__(self, sock, keyfile=None, certfile=None,
+                  server_side=False, cert_reqs=CERT_NONE,
+-                 ssl_version=PROTOCOL_SSLv23, ca_certs=None,
++                 ssl_version=PROTOCOL_TLSv1, ca_certs=None,
+                  do_handshake_on_connect=True, *args, **kw):
+         if not isinstance(sock, GreenSocket):
+             sock = GreenSocket(sock)
