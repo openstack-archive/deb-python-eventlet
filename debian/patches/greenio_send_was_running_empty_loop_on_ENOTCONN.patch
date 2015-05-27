@@ -1,0 +1,29 @@
+Description: greenio: send() was running empty loop on ENOTCONN
+ Thanks to Seyeong Kim
+ https://github.com/eventlet/eventlet/issues/192
+Author: Sergey Shepelev <temotor@gmail.com>
+Date: Fri, 15 May 2015 03:56:04 +0300
+
+diff --git a/AUTHORS b/AUTHORS
+index e0ab0e2..c57f010 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -119,3 +119,4 @@ Thanks To
+ * Sean Dague, wsgi: Provide python logging compatibility
+ * Tim Simmons, Use _socket_nodns and select in dnspython support
+ * Antonio Cuni, fix fd double close on PyPy
++* Seyeong Kim
+diff --git a/eventlet/greenio/base.py b/eventlet/greenio/base.py
+index 8da51ca..1e43176 100644
+--- a/eventlet/greenio/base.py
++++ b/eventlet/greenio/base.py
+@@ -358,7 +358,8 @@ def send(self, data, flags=0):
+             try:
+                 total_sent += fd.send(data[total_sent:], flags)
+             except socket.error as e:
+-                if get_errno(e) not in SOCKET_BLOCKING:
++                eno = get_errno(e)
++                if eno == errno.ENOTCONN or eno not in SOCKET_BLOCKING:
+                     raise
+ 
+             if total_sent == len_data:

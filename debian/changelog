@@ -1,3 +1,9 @@
+python-eventlet (0.17.4-2) unstable; urgency=medium
+
+  * Added greenio_send_was_running_empty_loop_on_ENOTCONN.patch.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 27 May 2015 21:33:41 +0000
+
 python-eventlet (0.17.4-1) unstable; urgency=medium
 
   * New upstream release.
