@@ -1,8 +1,10 @@
+import sys
+import time
+
 import eventlet
 from eventlet.green import subprocess
 import eventlet.patcher
-import sys
-import time
+import tests
 original_subprocess = eventlet.patcher.original('subprocess')
 
 
@@ -64,3 +66,20 @@ def test_close_popen_stdin_with_close_fds():
         p.stdin.close()
     except Exception as e:
         assert False, "Exception should not be raised, got %r instead" % e
+
+
+def test_universal_lines():
+    p = subprocess.Popen(
+        [sys.executable, '--version'],
+        shell=False,
+        stdout=subprocess.PIPE,
+        universal_newlines=True)
+    p.communicate(None)
+
+
+def test_patched_communicate_290():
+    # https://github.com/eventlet/eventlet/issues/290
+    # Certain order of import and monkey_patch breaks subprocess communicate()
+    # with AttributeError module `select` has no `poll` on Linux
+    # unpatched methods are removed for safety reasons in commit f63165c0e3
+    tests.run_isolated('subprocess_patched_communicate.py')

@@ -1,4 +1,5 @@
 import errno
+import functools
 import os
 import sys
 import time
@@ -11,7 +12,7 @@ from eventlet.green import socket
 from eventlet import greenio
 from eventlet import greenpool
 from eventlet import support
-from eventlet.support import six
+from eventlet.support import safe_writelines, six, writeall
 
 from eventlet.support.six.moves import urllib
 
@@ -48,6 +49,10 @@ def format_date_time(timestamp):
 # on errno module on all platforms, so some are literals :(
 BAD_SOCK = set((errno.EBADF, 10053))
 BROKEN_SOCK = set((errno.EPIPE, errno.ECONNRESET))
+
+
+class ChunkReadError(ValueError):
+    pass
 
 
 # special flag return value for apps
@@ -108,20 +113,18 @@ class Input(object):
         # Blank line
         towrite.append(b'\r\n')
 
-        self.wfile.writelines(towrite)
+        safe_writelines(self.wfile, towrite)
 
         # Reinitialize chunk_length (expect more data)
         self.chunk_length = -1
 
     def _do_read(self, reader, length=None):
-        if self.wfile is not None and \
-                not self.is_hundred_continue_response_sent:
+        if self.wfile is not None and not self.is_hundred_continue_response_sent:
             # 100 Continue response
             self.send_hundred_continue_response()
             self.is_hundred_continue_response_sent = True
-        if length is None and self.content_length is not None:
-            length = self.content_length - self.position
-        if length and length > self.content_length - self.position:
+        if (self.content_length is not None) and (
+                length is None or length > self.content_length - self.position):
             length = self.content_length - self.position
         if not length:
             return b''
@@ -133,8 +136,7 @@ class Input(object):
         return read
 
     def _chunked_read(self, rfile, length=None, use_readline=False):
-        if self.wfile is not None and \
-                not self.is_hundred_continue_response_sent:
+        if self.wfile is not None and not self.is_hundred_continue_response_sent:
             # 100 Continue response
             self.send_hundred_continue_response()
             self.is_hundred_continue_response_sent = True
@@ -176,7 +178,10 @@ class Input(object):
                     if use_readline and data[-1] == "\n":
                         break
                 else:
-                    self.chunk_length = int(rfile.readline().split(b";", 1)[0], 16)
+                    try:
+                        self.chunk_length = int(rfile.readline().split(b";", 1)[0], 16)
+                    except ValueError as err:
+                        raise ChunkReadError(err)
                     self.position = 0
                     if self.chunk_length == 0:
                         rfile.readline()
@@ -216,6 +221,10 @@ class Input(object):
                 for key, value in headers]
         self.hundred_continue_headers = headers
 
+    def discard(self, buffer_size=16 << 10):
+        while self.read(buffer_size):
+            pass
+
 
 class HeaderLineTooLong(Exception):
     pass
@@ -238,6 +247,9 @@ class LoggerFileWrapper(object):
         self.log = log
         self._debug = debug
 
+    def error(self, msg, *args, **kwargs):
+        self.write(msg, *args)
+
     def info(self, msg, *args, **kwargs):
         self.write(msg, *args)
 
@@ -249,7 +261,7 @@ class LoggerFileWrapper(object):
         msg = msg + '\n'
         if args:
             msg = msg % args
-        self.log.write(msg)
+        writeall(self.log, msg)
 
 
 class FileObjectForHeaders(object):
@@ -303,7 +315,8 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             self.raw_requestline = self.rfile.readline(self.server.url_length_limit)
             if len(self.raw_requestline) == self.server.url_length_limit:
-                self.wfile.write(
+                writeall(
+                    self.wfile,
                     b"HTTP/1.0 414 Request URI Too Long\r\n"
                     b"Connection: close\r\nContent-length: 0\r\n\r\n")
                 self.close_connection = 1
@@ -325,13 +338,15 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
             if not self.parse_request():
                 return
         except HeaderLineTooLong:
-            self.wfile.write(
+            writeall(
+                self.wfile,
                 b"HTTP/1.0 400 Header Line Too Long\r\n"
                 b"Connection: close\r\nContent-length: 0\r\n\r\n")
             self.close_connection = 1
             return
         except HeadersTooLarge:
-            self.wfile.write(
+            writeall(
+                self.wfile,
                 b"HTTP/1.0 400 Headers Too Large\r\n"
                 b"Connection: close\r\nContent-length: 0\r\n\r\n")
             self.close_connection = 1
@@ -344,7 +359,8 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
             try:
                 int(content_length)
             except ValueError:
-                self.wfile.write(
+                writeall(
+                    self.wfile,
                     b"HTTP/1.0 400 Bad Request\r\n"
                     b"Connection: close\r\nContent-length: 0\r\n\r\n")
                 self.close_connection = 1
@@ -374,7 +390,7 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
         length = [0]
         status_code = [200]
 
-        def write(data, _writelines=wfile.writelines):
+        def write(data, _writelines=functools.partial(safe_writelines, wfile)):
             towrite = []
             if not headers_set:
                 raise AssertionError("write() before start_response()")
@@ -468,6 +484,8 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
                 minimum_write_chunk_size = int(self.environ.get(
                     'eventlet.minimum_write_chunk_size', self.minimum_chunk_size))
                 for data in result:
+                    if len(data) == 0:
+                        continue
                     if isinstance(data, six.text_type):
                         data = data.encode('ascii')
 
@@ -496,16 +514,20 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
         finally:
             if hasattr(result, 'close'):
                 result.close()
-            if (self.environ['eventlet.input'].chunked_input or
-                    self.environ['eventlet.input'].position
-                    < (self.environ['eventlet.input'].content_length or 0)):
+            request_input = self.environ['eventlet.input']
+            if (request_input.chunked_input or
+                    request_input.position < (request_input.content_length or 0)):
                 # Read and discard body if there was no pending 100-continue
-                if not self.environ['eventlet.input'].wfile:
-                    # NOTE: MINIMUM_CHUNK_SIZE is used here for purpose different than chunking.
-                    # We use it only cause it's at hand and has reasonable value in terms of
-                    # emptying the buffer.
-                    while self.environ['eventlet.input'].read(MINIMUM_CHUNK_SIZE):
-                        pass
+                if not request_input.wfile and self.close_connection == 0:
+                    try:
+                        request_input.discard()
+                    except ChunkReadError as e:
+                        self.close_connection = 1
+                        self.server.log.error((
+                            'chunked encoding error while discarding request body.'
+                            + ' ip={0} request="{1}" error="{2}"').format(
+                                self.get_client_ip(), self.requestline, e,
+                        ))
             finish = time.time()
 
             for hook, args, kwargs in self.environ['eventlet.posthooks']:
@@ -711,6 +733,24 @@ except ImportError:
     ACCEPT_ERRNO = set((errno.EPIPE, errno.EBADF, errno.ECONNRESET))
 
 
+def socket_repr(sock):
+    scheme = 'http'
+    if hasattr(sock, 'do_handshake'):
+        scheme = 'https'
+
+    name = sock.getsockname()
+    if sock.family == socket.AF_INET:
+        hier_part = '//{0}:{1}'.format(*name)
+    elif sock.family == socket.AF_INET6:
+        hier_part = '//[{0}]:{1}'.format(*name[:2])
+    elif sock.family == socket.AF_UNIX:
+        hier_part = name
+    else:
+        hier_part = repr(name)
+
+    return scheme + ':' + hier_part
+
+
 def server(sock, site,
            log=None,
            environ=None,
@@ -752,6 +792,7 @@ def server(sock, site,
                 If not specified, sys.stderr is used.
     :param environ: Additional parameters that go into the environ dictionary of every request.
     :param max_size: Maximum number of client connections opened at any time by this server.
+                Default is 1024.
     :param max_http_version: Set to "HTTP/1.0" to make the server pretend it only supports HTTP 1.0.
                 This can help with applications or clients that don't behave properly using HTTP 1.1.
     :param protocol: Protocol class.  Deprecated.
@@ -805,19 +846,8 @@ def server(sock, site,
     else:
         pool = greenpool.GreenPool(max_size)
     try:
-        host, port = sock.getsockname()[:2]
-        port = ':%s' % (port, )
-        if hasattr(sock, 'do_handshake'):
-            scheme = 'https'
-            if port == ':443':
-                port = ''
-        else:
-            scheme = 'http'
-            if port == ':80':
-                port = ''
-
-        serv.log.info("(%s) wsgi starting up on %s://%s%s/" % (
-            serv.pid, scheme, host, port))
+        serv.log.info("(%s) wsgi starting up on %s" % (
+            serv.pid, socket_repr(sock)))
         while is_accepting:
             try:
                 client_socket = sock.accept()

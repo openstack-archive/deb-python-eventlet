@@ -251,27 +251,19 @@ def monkey_patch(**on):
         on.setdefault(modname, default_on)
 
     modules_to_patch = []
-    if on['os'] and not already_patched.get('os'):
-        modules_to_patch += _green_os_modules()
-        already_patched['os'] = True
-    if on['select'] and not already_patched.get('select'):
-        modules_to_patch += _green_select_modules()
-        already_patched['select'] = True
-    if on['socket'] and not already_patched.get('socket'):
-        modules_to_patch += _green_socket_modules()
-        already_patched['socket'] = True
-    if on['thread'] and not already_patched.get('thread'):
-        modules_to_patch += _green_thread_modules()
-        already_patched['thread'] = True
-    if on['time'] and not already_patched.get('time'):
-        modules_to_patch += _green_time_modules()
-        already_patched['time'] = True
-    if on.get('MySQLdb') and not already_patched.get('MySQLdb'):
-        modules_to_patch += _green_MySQLdb()
-        already_patched['MySQLdb'] = True
-    if on.get('builtins') and not already_patched.get('builtins'):
-        modules_to_patch += _green_builtins()
-        already_patched['builtins'] = True
+    for name, modules_function in [
+        ('os', _green_os_modules),
+        ('select', _green_select_modules),
+        ('socket', _green_socket_modules),
+        ('thread', _green_thread_modules),
+        ('time', _green_time_modules),
+        ('MySQLdb', _green_MySQLdb),
+        ('builtins', _green_builtins),
+    ]:
+        if on[name] and not already_patched.get(name):
+            modules_to_patch += modules_function()
+            already_patched[name] = True
+
     if on['psycopg'] and not already_patched.get('psycopg'):
         try:
             from eventlet.support import psycopg2_patcher
@@ -295,6 +287,10 @@ def monkey_patch(**on):
                 patched_attr = getattr(mod, attr_name, None)
                 if patched_attr is not None:
                     setattr(orig_mod, attr_name, patched_attr)
+            deleted = getattr(mod, '__deleted__', [])
+            for attr_name in deleted:
+                if hasattr(orig_mod, attr_name):
+                    delattr(orig_mod, attr_name)
     finally:
         imp.release_lock()
 
@@ -331,7 +327,13 @@ def _green_os_modules():
 
 def _green_select_modules():
     from eventlet.green import select
-    return [('select', select)]
+    modules = [('select', select)]
+
+    if sys.version_info >= (3, 4):
+        from eventlet.green import selectors
+        modules.append(('selectors', selectors))
+
+    return modules
 
 
 def _green_socket_modules():

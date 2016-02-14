@@ -2,18 +2,21 @@ import cgi
 import collections
 import errno
 import os
+import shutil
 import signal
 import socket
 import sys
+import tempfile
 import traceback
 import unittest
+
+from nose.tools import eq_
 
 import eventlet
 from eventlet import debug
 from eventlet import event
 from eventlet.green import socket as greensocket
 from eventlet.green import ssl
-from eventlet.green import subprocess
 from eventlet import greenio
 from eventlet import greenthread
 from eventlet import support
@@ -333,14 +336,6 @@ class TestHttpd(_TestBase):
         self.assertRaises(ConnectionClosed, read_http, sock)
         fd.close()
 
-    @tests.skipped
-    def test_005_run_apachebench(self):
-        url = 'http://localhost:12346/'
-        # ab is apachebench
-        subprocess.call(
-            [tests.find_command('ab'), '-c', '64', '-n', '1024', '-k', url],
-            stdout=subprocess.PIPE)
-
     def test_006_reject_long_urls(self):
         sock = eventlet.connect(
             ('localhost', self.port))
@@ -450,6 +445,61 @@ class TestHttpd(_TestBase):
         response = fd.read()
         # Require a CRLF to close the message body
         self.assertEqual(response, b'\r\n')
+
+    def test_partial_writes_are_handled(self):
+        # The bug was caused by the default writelines() implementaiton
+        # (used by the wsgi module) which doesn't check if write()
+        # successfully completed sending *all* data therefore data could be
+        # lost and the client could be left hanging forever.
+        #
+        # This test additionally ensures that plain write() calls in the wsgi
+        # are also correct now (replaced with writeare also correct now (replaced with writeall()).
+        #
+        # Eventlet issue: "Python 3: wsgi doesn't handle correctly partial
+        # write of socket send() when using writelines()",
+        # https://github.com/eventlet/eventlet/issues/295
+        #
+        # Related CPython issue: "Raw I/O writelines() broken",
+        # http://bugs.python.org/issue26292
+
+        # Custom accept() and send() in order to simulate a connection that
+        # only sends one byte at a time so that any code that doesn't handle
+        # partial writes correctly has to fail.
+        listen_socket = eventlet.listen(('localhost', 0))
+        original_accept = listen_socket.accept
+
+        def accept():
+            connection, address = original_accept()
+            original_send = connection.send
+
+            def send(b, *args):
+                if b:
+                    b = b[0:1]
+                return original_send(b, *args)
+
+            connection.send = send
+            return connection, address
+
+        listen_socket.accept = accept
+
+        def application(env, start_response):
+            # Sending content-length is important here so that the client knows
+            # exactly how many bytes does it need to wait for.
+            start_response('200 OK', [('Content-length', 3)])
+            yield 'asd'
+
+        self.spawn_server(sock=listen_socket)
+        self.site.application = application
+
+        sock = eventlet.connect(('localhost', self.port))
+
+        sock.sendall(b'GET / HTTP/1.1\r\nHost: localhost\r\n\r\n')
+
+        # This would previously hang forever
+        result = read_http(sock)
+
+        # Just to be sure we actually read what we wanted
+        eq_(result.body, b'asd')
 
     @tests.skip_if_no_ssl
     def test_012_ssl_server(self):
@@ -1046,6 +1096,21 @@ class TestHttpd(_TestBase):
         self.assertNotEqual(result.headers_lower.get('transfer-encoding'), 'chunked')
         self.assertEqual(result.body, b"thisischunked")
 
+    def test_chunked_response_when_app_yields_empty_string(self):
+        def empty_string_chunked_app(env, start_response):
+            env['eventlet.minimum_write_chunk_size'] = 0  # no buffering
+            start_response('200 OK', [('Content-type', 'text/plain')])
+            return iter([b"stuff", b"", b"more stuff"])
+
+        self.site.application = empty_string_chunked_app
+        sock = eventlet.connect(('localhost', self.port))
+
+        sock.sendall(b'GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n')
+
+        result = read_http(sock)
+        self.assertEqual(result.headers_lower.get('transfer-encoding'), 'chunked')
+        self.assertEqual(result.body, b"5\r\nstuff\r\na\r\nmore stuff\r\n0\r\n\r\n")
+
     def test_minimum_chunk_size_parameter_leaves_httpprotocol_class_member_intact(self):
         start_size = wsgi.HttpProtocol.minimum_chunk_size
 
@@ -1317,6 +1382,70 @@ class TestHttpd(_TestBase):
         self.assertEqual(read_content.wait(), b'ok')
         assert blew_up[0]
 
+    def test_aborted_chunked_post_between_chunks(self):
+        read_content = event.Event()
+        blew_up = [False]
+
+        def chunk_reader(env, start_response):
+            try:
+                content = env['wsgi.input'].read(1024)
+            except wsgi.ChunkReadError:
+                blew_up[0] = True
+                content = b'ok'
+            except Exception as err:
+                blew_up[0] = True
+                content = b'wrong exception: ' + str(err).encode()
+            read_content.send(content)
+            start_response('200 OK', [('Content-Type', 'text/plain')])
+            return [content]
+        self.site.application = chunk_reader
+        expected_body = 'A' * 0xdb
+        data = "\r\n".join(['PUT /somefile HTTP/1.0',
+                            'Transfer-Encoding: chunked',
+                            '',
+                            'db',
+                            expected_body])
+        # start PUT-ing some chunked data but close prematurely
+        sock = eventlet.connect(('127.0.0.1', self.port))
+        sock.sendall(data.encode())
+        sock.close()
+        # the test passes if we successfully get here, and read all the data
+        # in spite of the early close
+        self.assertEqual(read_content.wait(), b'ok')
+        assert blew_up[0]
+
+    def test_aborted_chunked_post_bad_chunks(self):
+        read_content = event.Event()
+        blew_up = [False]
+
+        def chunk_reader(env, start_response):
+            try:
+                content = env['wsgi.input'].read(1024)
+            except wsgi.ChunkReadError:
+                blew_up[0] = True
+                content = b'ok'
+            except Exception as err:
+                blew_up[0] = True
+                content = b'wrong exception: ' + str(err).encode()
+            read_content.send(content)
+            start_response('200 OK', [('Content-Type', 'text/plain')])
+            return [content]
+        self.site.application = chunk_reader
+        expected_body = 'look here is some data for you'
+        data = "\r\n".join(['PUT /somefile HTTP/1.0',
+                            'Transfer-Encoding: chunked',
+                            '',
+                            'cats',
+                            expected_body])
+        # start PUT-ing some garbage
+        sock = eventlet.connect(('127.0.0.1', self.port))
+        sock.sendall(data.encode())
+        sock.close()
+        # the test passes if we successfully get here, and read all the data
+        # in spite of the early close
+        self.assertEqual(read_content.wait(), b'ok')
+        assert blew_up[0]
+
     def test_exceptions_close_connection(self):
         def wsgi_app(environ, start_response):
             raise RuntimeError("intentional error")
@@ -1488,6 +1617,20 @@ class TestHttpd(_TestBase):
         self.assertEqual(result.headers_lower[random_case_header[0].lower()], random_case_header[1])
         self.assertEqual(result.headers_original[random_case_header[0]], random_case_header[1])
 
+    def test_log_unix_address(self):
+        tempdir = tempfile.mkdtemp('eventlet_test_log_unix_address')
+        path = ''
+        try:
+            sock = eventlet.listen(tempdir + '/socket', socket.AF_UNIX)
+            path = sock.getsockname()
+
+            log = six.StringIO()
+            self.spawn_server(sock=sock, log=log)
+            eventlet.sleep(0)  # need to enter server loop
+            assert 'http:' + path in log.getvalue()
+        finally:
+            shutil.rmtree(tempdir)
+
 
 def read_headers(sock):
     fd = sock.makefile('rb')
@@ -1558,7 +1701,6 @@ class ProxiedIterableAlreadyHandledTest(IterableAlreadyHandledTest):
 
 
 class TestChunkedInput(_TestBase):
-    dirt = ""
     validator = None
 
     def application(self, env, start_response):
@@ -1607,16 +1749,13 @@ class TestChunkedInput(_TestBase):
         self.site = Site()
         self.site.application = self.application
 
-    def chunk_encode(self, chunks, dirt=None):
-        if dirt is None:
-            dirt = self.dirt
-
+    def chunk_encode(self, chunks, dirt=""):
         b = ""
         for c in chunks:
             b += "%x%s\r\n%s\r\n" % (len(c), dirt, c)
         return b
 
-    def body(self, dirt=None):
+    def body(self, dirt=""):
         return self.chunk_encode(["this", " is ", "chunked", "\nline",
                                   " 2", "\n", "line3", ""], dirt=dirt)
 

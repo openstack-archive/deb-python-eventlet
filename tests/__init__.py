@@ -209,6 +209,13 @@ def check_idle_cpu_usage(duration, allowed_part):
     r2 = resource.getrusage(resource.RUSAGE_SELF)
     utime = r2.ru_utime - r1.ru_utime
     stime = r2.ru_stime - r1.ru_stime
+
+    # This check is reliably unreliable on Travis, presumably because of CPU
+    # resources being quite restricted by the build environment. The workaround
+    # is to apply an arbitrary factor that should be enough to make it work nicely.
+    if os.environ.get('TRAVIS') == 'true':
+        allowed_part *= 1.2
+
     assert utime + stime < duration * allowed_part, \
         "CPU usage over limit: user %.0f%% sys %.0f%% allowed %.0f%%" % (
             utime / duration * 100, stime / duration * 100,
@@ -292,13 +299,15 @@ def get_database_auth():
     return retval
 
 
-def run_python(path):
+def run_python(path, env=None):
     if not path.endswith('.py'):
         path += '.py'
     path = os.path.abspath(path)
     src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     new_env = os.environ.copy()
     new_env['PYTHONPATH'] = os.pathsep.join(sys.path + [src_dir])
+    if env:
+        new_env.update(env)
     p = subprocess.Popen(
         [sys.executable, path],
         env=new_env,
@@ -310,15 +319,18 @@ def run_python(path):
     return output
 
 
-def run_isolated(path, prefix='tests/isolated/'):
-    output = run_python(prefix + path).rstrip()
+def run_isolated(path, prefix='tests/isolated/', env=None):
+    output = run_python(prefix + path, env=env).rstrip()
     if output.startswith(b'skip'):
         parts = output.split(b':', 1)
         skip_args = []
         if len(parts) > 1:
             skip_args.append(parts[1])
         raise SkipTest(*skip_args)
-    assert output == b'pass', output
+    ok = output == b'pass'
+    if not ok:
+        sys.stderr.write('Isolated test {0} output:\n---\n{1}\n---\n'.format(path, output.decode()))
+    assert ok, 'Expected single line "pass" in stdout'
 
 
 certificate_file = os.path.join(os.path.dirname(__file__), 'test_server.crt')

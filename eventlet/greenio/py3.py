@@ -75,10 +75,26 @@ class GreenFileIO(_OriginalIOBase):
     def fileno(self):
         return self._fileno
 
-    def read(self, buflen):
+    def read(self, size=-1):
+        if size == -1:
+            return self.readall()
+
         while True:
             try:
-                return _original_os.read(self._fileno, buflen)
+                return _original_os.read(self._fileno, size)
+            except OSError as e:
+                if get_errno(e) not in SOCKET_BLOCKING:
+                    raise IOError(*e.args)
+            self._trampoline(self, read=True)
+
+    def readall(self):
+        buf = []
+        while True:
+            try:
+                chunk = _original_os.read(self._fileno, DEFAULT_BUFFER_SIZE)
+                if chunk == b'':
+                    return b''.join(buf)
+                buf.append(chunk)
             except OSError as e:
                 if get_errno(e) not in SOCKET_BLOCKING:
                     raise IOError(*e.args)
@@ -116,14 +132,19 @@ class GreenFileIO(_OriginalIOBase):
         self._closed = True
 
     def write(self, data):
-        while True:
+        view = memoryview(data)
+        datalen = len(data)
+        offset = 0
+        while offset < datalen:
             try:
-                return _original_os.write(self._fileno, data)
+                written = _original_os.write(self._fileno, view[offset:])
             except OSError as e:
                 if get_errno(e) not in SOCKET_BLOCKING:
                     raise IOError(*e.args)
-                else:
-                    trampoline(self, write=True)
+                trampoline(self, write=True)
+            else:
+                offset += written
+        return offset
 
     def close(self):
         if not self._closed:

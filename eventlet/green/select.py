@@ -6,6 +6,9 @@ from eventlet.support import six
 
 
 __patched__ = ['select']
+# FIXME: must also delete `poll`, but it breaks subprocess `communicate()`
+# https://github.com/eventlet/eventlet/issues/290
+__deleted__ = ['devpoll', 'epoll', 'kqueue', 'kevent']
 
 
 def get_fileno(obj):
