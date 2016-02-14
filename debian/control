@@ -12,12 +12,14 @@ Build-Depends: debhelper (>= 9),
                python-sphinx,
                python3-all,
                python3-setuptools,
-Build-Depends-Indep: python-greenlet,
+Build-Depends-Indep: python-dnspython,
+                     python-greenlet,
                      python-httplib2,
                      python-mock,
                      python-nose,
                      python-openssl,
                      python-zmq,
+                     python3-dnspython,
                      python3-greenlet,
                      python3-httplib2,
                      python3-mock,
@@ -25,8 +27,8 @@ Build-Depends-Indep: python-greenlet,
                      python3-openssl,
                      python3-zmq,
 Standards-Version: 3.9.6
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-eventlet.git;a=summary
-Vcs-Git: git://anonscm.debian.org/openstack/python-eventlet.git
+Vcs-Browser: https://anonscm.debian.org/cgit/openstack/python-eventlet.git/
+Vcs-Git: https://anonscm.debian.org/git/openstack/python-eventlet.git
 Homepage: http://eventlet.net
 
 Package: python-eventlet
