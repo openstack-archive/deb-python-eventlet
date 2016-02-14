@@ -1,3 +1,16 @@
+python-eventlet (0.18.3-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+  * Removed greenio_send_was_running_empty_loop_on_ENOTCONN.patch
+    (Applied upstream)
+  * Rebased use-packaged-python-mock-rather-than-embedded.patch
+  * Rebased set-defaults-to-be-tlsv1-not-sslv23.patch
+  * Rebased remove-self.assert-in-tests.patcher_test.py.patch
+  * Added python(3)-dnspython build dependency.
+  * Fixed VCS URLs (https).
+
+ -- Ondřej Nový <novy@ondrej.org>  Sun, 14 Feb 2016 14:56:08 +0100
+
 python-eventlet (0.17.4-2) unstable; urgency=medium
 
   * Added greenio_send_was_running_empty_loop_on_ENOTCONN.patch.

@@ -3,20 +3,18 @@ Author: Thomas Goirand <zigo@debian.org>
 Forwarded: no
 Last-Update: 2014-09-07
 
-Index: python-eventlet-0.17.3/tests/patcher_test.py
-===================================================================
---- python-eventlet-0.17.3.orig/tests/patcher_test.py
-+++ python-eventlet-0.17.3/tests/patcher_test.py
-@@ -325,7 +325,7 @@ print(len(_threading._active))
+--- a/tests/patcher_test.py
++++ b/tests/patcher_test.py
+@@ -327,7 +327,7 @@
          self.assertEqual(len(lines), 4, "\n".join(lines))
          assert lines[0].startswith('<Thread'), lines[0]
-         self.assertEqual(lines[1], "1", lines[1])
--        self.assertEqual(lines[2], "1", lines[2])
-+        #self.assertEqual(lines[2], "1", lines[2])
+         assert lines[1] == '1', lines
+-        assert lines[2] == '1', lines
++        #assert lines[2] == '1', lines
  
      def test_threading(self):
          new_mod = """import eventlet
-@@ -356,7 +356,7 @@ print(len(threading._active))
+@@ -358,7 +358,7 @@
  """
          self.write_to_tempfile("newmod", new_mod)
          output, lines = self.launch_subprocess('newmod')
