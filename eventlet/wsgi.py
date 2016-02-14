@@ -7,13 +7,12 @@ import traceback
 import types
 import warnings
 
-from eventlet.green import BaseHTTPServer
-from eventlet.green import socket
 from eventlet import greenio
 from eventlet import greenpool
 from eventlet import support
-from eventlet.support import safe_writelines, six, writeall
-
+from eventlet.green import BaseHTTPServer
+from eventlet.green import socket
+from eventlet.support import six
 from eventlet.support.six.moves import urllib
 
 
@@ -113,7 +112,8 @@ class Input(object):
         # Blank line
         towrite.append(b'\r\n')
 
-        safe_writelines(self.wfile, towrite)
+        self.wfile.writelines(towrite)
+        self.wfile.flush()
 
         # Reinitialize chunk_length (expect more data)
         self.chunk_length = -1
@@ -261,7 +261,7 @@ class LoggerFileWrapper(object):
         msg = msg + '\n'
         if args:
             msg = msg % args
-        writeall(self.log, msg)
+        self.log.write(msg)
 
 
 class FileObjectForHeaders(object):
@@ -288,9 +288,23 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
     minimum_chunk_size = MINIMUM_CHUNK_SIZE
     capitalize_response_headers = True
 
+    # Disable nagle algorithm for this socket, if True.
+    # Use only when wbufsize != 0, to avoid small packets.
+    # Contrary to stdlib, it's enabled by default.
+    disable_nagle_algorithm = True
+
+    # https://github.com/eventlet/eventlet/issues/295
+    # Stdlib default is 0 (unbuffered), but then `wfile.writelines()` looses data
+    # so before going back to unbuffered, remove any usage of `writelines`.
+    wbufsize = 16 << 10
+
     def setup(self):
         # overriding SocketServer.setup to correctly handle SSL.Connection objects
         conn = self.connection = self.request
+
+        if self.disable_nagle_algorithm:
+            conn.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
+
         try:
             self.rfile = conn.makefile('rb', self.rbufsize)
             self.wfile = conn.makefile('wb', self.wbufsize)
@@ -315,8 +329,7 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             self.raw_requestline = self.rfile.readline(self.server.url_length_limit)
             if len(self.raw_requestline) == self.server.url_length_limit:
-                writeall(
-                    self.wfile,
+                self.wfile.write(
                     b"HTTP/1.0 414 Request URI Too Long\r\n"
                     b"Connection: close\r\nContent-length: 0\r\n\r\n")
                 self.close_connection = 1
@@ -338,15 +351,13 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
             if not self.parse_request():
                 return
         except HeaderLineTooLong:
-            writeall(
-                self.wfile,
+            self.wfile.write(
                 b"HTTP/1.0 400 Header Line Too Long\r\n"
                 b"Connection: close\r\nContent-length: 0\r\n\r\n")
             self.close_connection = 1
             return
         except HeadersTooLarge:
-            writeall(
-                self.wfile,
+            self.wfile.write(
                 b"HTTP/1.0 400 Headers Too Large\r\n"
                 b"Connection: close\r\nContent-length: 0\r\n\r\n")
             self.close_connection = 1
@@ -359,8 +370,7 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
             try:
                 int(content_length)
             except ValueError:
-                writeall(
-                    self.wfile,
+                self.wfile.write(
                     b"HTTP/1.0 400 Bad Request\r\n"
                     b"Connection: close\r\nContent-length: 0\r\n\r\n")
                 self.close_connection = 1
@@ -390,7 +400,7 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
         length = [0]
         status_code = [200]
 
-        def write(data, _writelines=functools.partial(safe_writelines, wfile)):
+        def write(data):
             towrite = []
             if not headers_set:
                 raise AssertionError("write() before start_response()")
@@ -439,7 +449,8 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
                 towrite.append(six.b("%x" % (len(data),)) + b"\r\n" + data + b"\r\n")
             else:
                 towrite.append(data)
-            _writelines(towrite)
+            wfile.writelines(towrite)
+            wfile.flush()
             length[0] = length[0] + sum(map(len, towrite))
 
         def start_response(status, response_headers, exc_info=None):
