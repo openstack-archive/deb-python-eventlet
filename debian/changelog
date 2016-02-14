@@ -9,6 +9,7 @@ python-eventlet (0.18.3-1) UNRELEASED; urgency=medium
   * Added python(3)-dnspython build dependency.
   * Fixed VCS URLs (https).
   * Standards-Version is 3.9.7 now (no change).
+  * Fixed upstream changelog.
 
  -- Ondřej Nový <novy@ondrej.org>  Sun, 14 Feb 2016 14:56:08 +0100
 

@@ -37,3 +37,6 @@ override_dh_compress:
 override_dh_clean:
 	dh_clean -O--buildsystem=python_distutils
 	rm -rf build
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
