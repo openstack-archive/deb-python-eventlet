@@ -1,7 +1,6 @@
-python-eventlet (0.18.4-1) UNRELEASED; urgency=medium
+python-eventlet (0.18.4-1) experimental; urgency=medium
 
   [ Ondřej Nový ]
-  * New upstream release.
   * Removed greenio_send_was_running_empty_loop_on_ENOTCONN.patch
     (Applied upstream)
   * Rebased use-packaged-python-mock-rather-than-embedded.patch
@@ -17,7 +16,7 @@ python-eventlet (0.18.4-1) UNRELEASED; urgency=medium
   [ Corey Bryant ]
   * New upstream release.
 
- -- Corey Bryant <corey.bryant@canonical.com>  Thu, 25 Feb 2016 16:11:46 -0500
+ -- Ondřej Nový <novy@ondrej.org>  Fri, 26 Feb 2016 21:44:11 +0100
 
 python-eventlet (0.17.4-2) unstable; urgency=medium
 
