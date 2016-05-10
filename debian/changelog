@@ -1,6 +1,11 @@
 python-eventlet (0.18.4-4) UNRELEASED; urgency=medium
 
+  [ Ondřej Nový ]
   * Standards-Version is 3.9.8 now (no change)
+
+  [ James Page ]
+  * d/control: Add netbase to BD's, enabling tests that lookup
+    ports using service names.
 
  -- Ondřej Nový <novy@ondrej.org>  Sat, 09 Apr 2016 19:26:42 +0200
 
