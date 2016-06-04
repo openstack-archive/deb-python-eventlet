@@ -39,6 +39,7 @@ Architecture: all
 Depends: python-greenlet,
          ${misc:Depends},
          ${python:Depends},
+Suggests: python-eventlet-doc
 Description: concurrent networking library - Python 2.x
  Eventlet allows you to change how you run your code, not how you write it.
  .
@@ -60,6 +61,7 @@ Depends: python3-greenlet,
          ${misc:Depends},
          ${python3:Depends},
          ${sphinxdoc:Depends},
+Suggests: python-eventlet-doc
 Description: concurrent networking library - Python 3.x
  Eventlet allows you to change how you run your code, not how you write it.
  .
