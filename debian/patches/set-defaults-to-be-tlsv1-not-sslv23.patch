@@ -6,7 +6,7 @@ Last-Update: 2015-05-21
 
 --- a/eventlet/green/ssl.py
 +++ b/eventlet/green/ssl.py
-@@ -48,7 +48,7 @@
+@@ -49,7 +49,7 @@
  
      def __init__(self, sock, keyfile=None, certfile=None,
                   server_side=False, cert_reqs=CERT_NONE,
