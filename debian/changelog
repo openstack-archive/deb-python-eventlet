@@ -5,6 +5,7 @@ python-eventlet (0.19.0-1) experimental; urgency=medium
   * Standards-Version is 3.9.8 now (no change)
   * d/rules: Changed UPSTREAM_GIT protocol to https
   * Added python-subprocess32 to build dependencies
+  * Run nosetests during build and don't ignore errors
 
   [ James Page ]
   * d/control: Add netbase to BD's, enabling tests that lookup

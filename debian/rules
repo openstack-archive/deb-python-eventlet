@@ -27,7 +27,7 @@ override_dh_auto_test:
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 	set -e; \
 	for i in $(PYTHONS) $(PYTHON3S) ; do \
-		python$$i setup.py test || true; \
+		nosetests --verbose tests/ ; \
 	done
 endif
 
