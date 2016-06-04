@@ -1,14 +1,13 @@
-python-eventlet (0.18.4-4) UNRELEASED; urgency=medium
+python-eventlet (0.19.0-1) experimental; urgency=medium
 
   [ Ondřej Nový ]
+  * New upstream release
   * Standards-Version is 3.9.8 now (no change)
+  * d/rules: Changed UPSTREAM_GIT protocol to https
 
   [ James Page ]
   * d/control: Add netbase to BD's, enabling tests that lookup
     ports using service names.
-
-  [ Ondřej Nový ]
-  * d/rules: Changed UPSTREAM_GIT protocol to https
 
  -- Ondřej Nový <novy@ondrej.org>  Sat, 09 Apr 2016 19:26:42 +0200
 
