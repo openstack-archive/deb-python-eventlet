@@ -1,0 +1,70 @@
+Description: Increase greenio timeouts
+ Under some slow build machines (in my case, arm64 machine), the timout
+ simply occurs and the build fails.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2016-07-19
+
+--- python-eventlet-0.19.0.orig/tests/greenio_test.py
++++ python-eventlet-0.19.0/tests/greenio_test.py
+@@ -76,7 +76,7 @@ class TestGreenSocket(tests.LimitedTestC
+ 
+     def test_connect_timeout(self):
+         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+-        s.settimeout(0.1)
++        s.settimeout(0.4)
+         gs = greenio.GreenSocket(s)
+ 
+         try:
+@@ -91,13 +91,13 @@ class TestGreenSocket(tests.LimitedTestC
+         s.bind(('', 0))
+         s.listen(50)
+ 
+-        s.settimeout(0.1)
++        s.settimeout(0.4)
+         gs = greenio.GreenSocket(s)
+         expect_socket_timeout(gs.accept)
+ 
+     def test_connect_ex_timeout(self):
+         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+-        s.settimeout(0.1)
++        s.settimeout(0.4)
+         gs = greenio.GreenSocket(s)
+         e = gs.connect_ex(('192.0.2.1', 80))
+         if e not in (errno.EHOSTUNREACH, errno.ENETUNREACH):
+@@ -120,7 +120,7 @@ class TestGreenSocket(tests.LimitedTestC
+         addr = listener.getsockname()
+ 
+         client = greenio.GreenSocket(socket.socket())
+-        client.settimeout(0.1)
++        client.settimeout(0.4)
+ 
+         client.connect(addr)
+ 
+@@ -133,7 +133,7 @@ class TestGreenSocket(tests.LimitedTestC
+     def test_recvfrom_timeout(self):
+         gs = greenio.GreenSocket(
+             socket.socket(socket.AF_INET, socket.SOCK_DGRAM))
+-        gs.settimeout(.1)
++        gs.settimeout(.4)
+         gs.bind(('', 0))
+ 
+         expect_socket_timeout(gs.recvfrom, 0)
+@@ -144,7 +144,7 @@ class TestGreenSocket(tests.LimitedTestC
+ 
+         gs = greenio.GreenSocket(
+             socket.socket(socket.AF_INET, socket.SOCK_DGRAM))
+-        gs.settimeout(.1)
++        gs.settimeout(.4)
+         gs.bind(('', 0))
+ 
+         expect_socket_timeout(gs.recvfrom_into, buf)
+@@ -168,7 +168,7 @@ class TestGreenSocket(tests.LimitedTestC
+         addr = listener.getsockname()
+ 
+         client = greenio.GreenSocket(socket.socket())
+-        client.settimeout(0.1)
++        client.settimeout(0.4)
+ 
+         client.connect(addr)
+ 
