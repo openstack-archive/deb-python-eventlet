@@ -1,23 +1,13 @@
 #!/usr/bin/make -f
 
-PYTHONS:=$(shell pyversions -vr)
-PYTHON3S:=$(shell py3versions -vr)
-
 UPSTREAM_GIT := https://github.com/eventlet/eventlet.git
 include /usr/share/openstack-pkg-tools/pkgos.make
 
 %:
 	dh $@ -O--buildsystem=python_distutils --with python2,python3,sphinxdoc
 
-override_dh_install:
-	set -e ; for pyvers in $(PYTHONS); do \
-		python$$pyvers setup.py install --install-layout=deb \
-			--root $(CURDIR)/debian/python-eventlet; \
-	done
-	set -e ; for pyvers in $(PYTHON3S); do \
-		python$$pyvers setup.py install --install-layout=deb \
-			--root $(CURDIR)/debian/python3-eventlet; \
-	done
+override_dh_auto_install:
+	pkgos-dh_auto_install
 
 override_dh_sphinxdoc:
 	PYTHONPATH=. sphinx-build -N -b html doc $(CURDIR)/debian/python-eventlet-doc/usr/share/doc/python-eventlet-doc/html
