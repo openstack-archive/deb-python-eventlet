@@ -2,6 +2,7 @@
 *.egg*
 *.pyc
 .*
+!.gitreview
 build/
 dist/
 doc/changelog.rst

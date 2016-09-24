@@ -9,6 +9,10 @@ python-eventlet (0.19.0-2) UNRELEASED; urgency=medium
   * Correctly tests with nose & Py3.
   * Remove tests expecting timeout on 192.0.2.1.
 
+  [ Ondřej Nový ]
+  * d/s/options: extend-diff-ignore of .gitreview
+  * d/control: Using OpenStack's Gerrit as VCS URLs.
+
  -- Thomas Goirand <zigo@debian.org>  Tue, 19 Jul 2016 15:50:13 +0200
 
 python-eventlet (0.19.0-1) experimental; urgency=medium
