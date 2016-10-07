@@ -76,8 +76,6 @@ License: ccp-bsd
 
 Files: tests/mock.py
 Copyright: 2007-2009, Michael Foord
-Comment: Deleted during build, and Debian's python-mock package is used
- instead.
 License: voidspace-bsd
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:

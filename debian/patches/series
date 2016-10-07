@@ -1,8 +1,6 @@
 remove-self.assert-in-tests.patcher_test.py.patch
 fix-FTBFS-on-sphinx-build.patch
-use-packaged-python-mock-rather-than-embedded.patch
-enforce-tlsv1-always.patch
-set-defaults-to-be-tlsv1-not-sslv23.patch
 fixed-privacy-breach-in-examples.patch
 allow-more-busy-cpu.patch
 remove-networking-tests.patch
+greendns_tests_fix.patch

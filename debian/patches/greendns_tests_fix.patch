@@ -1,0 +1,77 @@
+From e3e6789a40191613e48561fe10948e74240ab04a Mon Sep 17 00:00:00 2001
+From: Jakub Stasiak <jakub.stasiak@smarkets.com>
+Date: Wed, 18 May 2016 14:13:09 +0200
+Subject: [PATCH] greendns tests: Work around patcher/green package weirdness
+
+The issue can be demonstrated by running the following piece of code:
+
+    # t.py
+    from __future__ import print_function
+
+    from eventlet.support import greendns
+
+    import sys
+    if sys.argv[1] == 'yes':
+        import dns.resolver
+
+    print(sys.argv[1], issubclass(greendns.HostsAnswer, greendns.dns.resolver.Answer))
+
+The results:
+
+    # Python 2.7.11
+    % python t.py yes
+    yes False
+    % python t.py no
+    no True
+
+    # Python 3.5.1
+    % python t.py yes
+    yes False
+    % python t.py no
+    no True
+
+Interestingly enough this particular test issue was only affecting Python
+3.5+ before 861d684. Why?
+
+* This issue appears to be caused by importing green version of a package
+  being followed by importing a non-green version of the same package
+* When we run tests using nose it first imports the main tests module
+  (tests/__init__.py) which imports eventlet, that imports
+  eventlet.convenience and that then imports eventlet.green.sockt.
+* Before 861d684 on Python < 3.5 the eventlet.green.socket import mentioned
+  above would fail to import greendns (because of an import cycle) so when
+  running those tests greendns was only being correctly imported *after* the
+  regular dns
+* Since 861d684 (or on Python 3.5+) the green socket module correctly
+  imports greendns which means that when the regular dns subpackages are
+  being imported in this test file greendns is already imported and the
+  patching issue demonstrated by the code above is in effect
+
+The patching/greening weirdness is reported[1] now.
+
+Fixes https://github.com/eventlet/eventlet/issues/267
+
+This patch is contributed by Smarkets Limited.
+
+[1] https://github.com/eventlet/eventlet/issues/316
+---
+ tests/greendns_test.py | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+--- a/tests/greendns_test.py
++++ b/tests/greendns_test.py
+@@ -9,13 +9,8 @@
+ import tests
+ from tests import mock
+ try:
+-    import dns.rdatatype
+-    import dns.rdtypes.IN.A
+-    import dns.rdtypes.IN.AAAA
+-    import dns.resolver
+-    import dns.reversename
+-    import dns.rrset
+     from eventlet.support import greendns
++    from eventlet.support.greendns import dns
+     greendns_available = True
+ except ImportError:
+     greendns_available = False

@@ -1,20 +1,41 @@
-python-eventlet (0.19.0-2) unstable; urgency=medium
-
-  [ Ondřej Nový ]
-  * d/{control,copyright}: Use my @debian.org email address
+python-eventlet (0.19.0-3) unstable; urgency=medium
 
   [ Thomas Goirand ]
   * Uploading to unstable.
-  * Add allow-more-busy-cpu.patch, as tests are failing in Jenkins.
-  * Using pkgos-dh_auto_install from openstack-pkg-tools (>= 52~).
-  * Correctly tests with nose & Py3.
-  * Remove tests expecting timeout on 192.0.2.1.
 
   [ Ondřej Nový ]
   * d/s/options: extend-diff-ignore of .gitreview
   * d/control: Using OpenStack's Gerrit as VCS URLs.
 
- -- Thomas Goirand <zigo@debian.org>  Tue, 19 Jul 2016 15:50:13 +0200
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 07 Oct 2016 09:27:11 +0200
+
+python-eventlet (0.19.0-2) experimental; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/{control,copyright}: Use my @debian.org email address
+  * d/p/use-packaged-python-mock-rather-than-embedded.patch:
+    Rebased and fixed for new release
+  * Dropped
+    - d/p/enforce-tlsv1-always.patch
+    - d/p/set-defaults-to-be-tlsv1-not-sslv23.patch
+    This patches was setting TLSv1 protocol as only allowed and don't
+    allowed TLS 1.1 + 1.2. Eventlet wrapper should not change SSL settings,
+    users should use ssl.create_default_context for better/safe defaults.
+  * Dropped d/p/use-packaged-python-mock-rather-than-embedded.patch
+    - Upstream is using own version of mock and don't want to use mock as deps
+      (https://github.com/eventlet/eventlet/pull/337)
+  * Require build depends packages version at least upstream is testing in CI
+  * Added upstream patch d/p/greendns_tests_fix.patch which fix building on
+    Python 3.5
+
+  [ Thomas Goirand ]
+  * Add allow-more-busy-cpu.patch, as tests are failing in Jenkins.
+  * Using pkgos-dh_auto_install from openstack-pkg-tools (>= 52~).
+  * Correctly tests with nose & Py3.
+  * Remove tests expecting timeout on 192.0.2.1.
+
+ -- Ondřej Nový <onovy@debian.org>  Fri, 12 Aug 2016 11:13:34 +0200
 
 python-eventlet (0.19.0-1) experimental; urgency=medium
 
