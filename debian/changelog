@@ -2,11 +2,11 @@ python-eventlet (0.19.0-3) unstable; urgency=medium
 
   [ Thomas Goirand ]
   * Uploading to unstable.
+  * Add remove-test_import_patched_defaults.patch.
 
   [ Ondřej Nový ]
   * d/s/options: extend-diff-ignore of .gitreview
   * d/control: Using OpenStack's Gerrit as VCS URLs.
-
 
  -- Thomas Goirand <zigo@debian.org>  Fri, 07 Oct 2016 09:27:11 +0200
 
