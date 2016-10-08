@@ -1,3 +1,9 @@
+python-eventlet (0.19.0-4) unstable; urgency=medium
+
+  * Patch out intersphinx extension (Closes: #840092).
+
+ -- Thomas Goirand <zigo@debian.org>  Sat, 08 Oct 2016 11:52:07 +0200
+
 python-eventlet (0.19.0-3) unstable; urgency=medium
 
   [ Thomas Goirand ]

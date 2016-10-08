@@ -5,3 +5,4 @@ allow-more-busy-cpu.patch
 remove-networking-tests.patch
 greendns_tests_fix.patch
 remove-test_import_patched_defaults.patch
+patch-out-intersphinx.patch
