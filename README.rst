@@ -1,3 +1,12 @@
+========================
+Team and repository tags
+========================
+
+.. image:: http://governance.openstack.org/badges/deb-python-eventlet.svg
+    :target: http://governance.openstack.org/reference/tags/index.html
+
+.. Change things from this point on
+
 Eventlet is a concurrent networking library for Python that allows you to change how you run your code, not how you write it.
 
 It uses epoll or libevent for highly scalable non-blocking I/O.  Coroutines ensure that the developer uses a blocking style of programming that is similar to threading, but provide the benefits of non-blocking I/O.  The event dispatch is implicit, which means you can easily use Eventlet from the Python interpreter, or as a small part of a larger application.
