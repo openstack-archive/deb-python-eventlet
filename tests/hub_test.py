@@ -2,7 +2,6 @@ from __future__ import with_statement
 import sys
 
 import tests
-from tests import LimitedTestCase, main, skip_with_pyevent, skip_if_no_itimer, skip_unless
 from tests.patcher_test import ProcessBase
 import time
 import eventlet
@@ -19,10 +18,10 @@ def noop():
     pass
 
 
-class TestTimerCleanup(LimitedTestCase):
+class TestTimerCleanup(tests.LimitedTestCase):
     TEST_TIMEOUT = 2
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_cancel_immediate(self):
         hub = hubs.get_hub()
         stimers = hub.get_timers_count()
@@ -36,7 +35,7 @@ class TestTimerCleanup(LimitedTestCase):
         self.assert_less_than_equal(hub.get_timers_count(), 1000 + stimers)
         self.assert_less_than_equal(hub.timers_canceled, 1000)
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_cancel_accumulated(self):
         hub = hubs.get_hub()
         stimers = hub.get_timers_count()
@@ -53,7 +52,7 @@ class TestTimerCleanup(LimitedTestCase):
         self.assert_less_than_equal(hub.get_timers_count(), 1000 + stimers)
         self.assert_less_than_equal(hub.timers_canceled, 1000)
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_cancel_proportion(self):
         # if fewer than half the pending timers are canceled, it should
         # not clean them out
@@ -85,7 +84,7 @@ class TestTimerCleanup(LimitedTestCase):
         eventlet.sleep()
 
 
-class TestScheduleCall(LimitedTestCase):
+class TestScheduleCall(tests.LimitedTestCase):
 
     def test_local(self):
         lst = [1]
@@ -111,7 +110,7 @@ class TestScheduleCall(LimitedTestCase):
         self.assertEqual(lst, [1, 2, 3])
 
 
-class TestDebug(LimitedTestCase):
+class TestDebug(tests.LimitedTestCase):
 
     def test_debug_listeners(self):
         hubs.get_hub().set_debug_listeners(True)
@@ -122,7 +121,7 @@ class TestDebug(LimitedTestCase):
         hubs.get_hub().set_timer_exceptions(False)
 
 
-class TestExceptionInMainloop(LimitedTestCase):
+class TestExceptionInMainloop(tests.LimitedTestCase):
 
     def test_sleep(self):
         # even if there was an error in the mainloop, the hub should continue
@@ -149,9 +148,9 @@ class TestExceptionInMainloop(LimitedTestCase):
                 delay, DELAY)
 
 
-class TestExceptionInGreenthread(LimitedTestCase):
+class TestExceptionInGreenthread(tests.LimitedTestCase):
 
-    @skip_unless(greenlets.preserves_excinfo)
+    @tests.skip_unless(greenlets.preserves_excinfo)
     def test_exceptionpreservation(self):
         # events for controlling execution order
         gt1event = Event()
@@ -206,7 +205,7 @@ class TestExceptionInGreenthread(LimitedTestCase):
             g.kill()
 
 
-class TestHubSelection(LimitedTestCase):
+class TestHubSelection(tests.LimitedTestCase):
 
     def test_explicit_hub(self):
         oldhub = hubs.get_hub()
@@ -217,10 +216,10 @@ class TestHubSelection(LimitedTestCase):
             hubs._threadlocal.hub = oldhub
 
 
-class TestHubBlockingDetector(LimitedTestCase):
+class TestHubBlockingDetector(tests.LimitedTestCase):
     TEST_TIMEOUT = 10
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_block_detect(self):
         def look_im_blocking():
             import time
@@ -231,8 +230,8 @@ class TestHubBlockingDetector(LimitedTestCase):
         self.assertRaises(RuntimeError, gt.wait)
         debug.hub_blocking_detection(False)
 
-    @skip_with_pyevent
-    @skip_if_no_itimer
+    @tests.skip_with_pyevent
+    @tests.skip_if_no_itimer
     def test_block_detect_with_itimer(self):
         def look_im_blocking():
             import time
@@ -245,7 +244,7 @@ class TestHubBlockingDetector(LimitedTestCase):
         debug.hub_blocking_detection(False)
 
 
-class TestSuspend(LimitedTestCase):
+class TestSuspend(tests.LimitedTestCase):
     TEST_TIMEOUT = 4
     longMessage = True
     maxDiff = None
@@ -283,25 +282,25 @@ except eventlet.Timeout:
         shutil.rmtree(self.tempdir)
 
 
-class TestBadFilenos(LimitedTestCase):
+class TestBadFilenos(tests.LimitedTestCase):
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_repeated_selects(self):
         from eventlet.green import select
         self.assertRaises(ValueError, select.select, [-1], [], [])
         self.assertRaises(ValueError, select.select, [-1], [], [])
 
 
-class TestFork(LimitedTestCase):
+class TestFork(tests.LimitedTestCase):
 
-    @skip_with_pyevent
+    @tests.skip_with_pyevent
     def test_fork(self):
         output = tests.run_python('tests/hub_test_fork.py')
         lines = output.splitlines()
         self.assertEqual(lines, [b"accept blocked", b"child died ok"], output)
 
 
-class TestDeadRunLoop(LimitedTestCase):
+class TestDeadRunLoop(tests.LimitedTestCase):
     TEST_TIMEOUT = 2
 
     class CustomException(Exception):
@@ -399,5 +398,5 @@ print('ok')
         self.assertEqual(output, 'kqueue tried\nok\n')
 
 
-if __name__ == '__main__':
-    main()
+def test_hub_silent_exception():
+    tests.run_isolated('hub_silent_exception.py')
