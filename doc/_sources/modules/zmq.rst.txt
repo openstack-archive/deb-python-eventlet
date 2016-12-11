@@ -31,6 +31,7 @@ auto generated :mod:`pyzmq's <zmq>` from documentation.
     :members:
 
 .. autoclass:: zmq.Socket
+    :members:
 
 .. autoclass:: zmq.Poller
     :members:

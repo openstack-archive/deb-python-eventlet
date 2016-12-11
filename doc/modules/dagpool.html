@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>dagpool – Dependency-Driven Greenthreads &mdash; Eventlet 0.20.0 documentation</title>
+    <title>dagpool – Dependency-Driven Greenthreads &#8212; Eventlet 0.20.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.20.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Eventlet 0.20.0 documentation" href="../index.html" />
-    <link rel="up" title="Module Reference" href="../modules.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="debug – Debugging tools for Eventlet" href="debug.html" />
     <link rel="prev" title="corolocal – Coroutine local storage" href="corolocal.html" /> 
   </head>
@@ -44,8 +45,8 @@
         <li class="right" >
           <a href="corolocal.html" title="corolocal – Coroutine local storage"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Module Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Module Reference</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -112,15 +113,15 @@ blocks until the next result can be delivered.</p>
 <p>Consider a couple of programs in some compiled language that depend on a set
 of precompiled libraries. Suppose every such build requires as input the
 specific set of library builds on which it directly depends.</p>
-<div class="highlight-python"><div class="highlight"><pre>a  zlib
-| /  |
-|/   |
-b    c
-|   /|
-|  / |
-| /  |
-|/   |
-d    e
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span>  <span class="n">zlib</span>
+<span class="o">|</span> <span class="o">/</span>  <span class="o">|</span>
+<span class="o">|/</span>   <span class="o">|</span>
+<span class="n">b</span>    <span class="n">c</span>
+<span class="o">|</span>   <span class="o">/|</span>
+<span class="o">|</span>  <span class="o">/</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">/</span>  <span class="o">|</span>
+<span class="o">|/</span>   <span class="o">|</span>
+<span class="n">d</span>    <span class="n">e</span>
 </pre></div>
 </div>
 <p>We can&#8217;t run the build for program d until we have the build results for both
@@ -128,16 +129,16 @@ b and c. We can&#8217;t run the build for library b until we have build results 
 a and zlib. We can, however, immediately run the builds for a and zlib.</p>
 <p>So we can use a DAGPool instance to spawn greenthreads running a function such
 as this:</p>
-<div class="highlight-python"><div class="highlight"><pre>def builder(key, upstream):
-    for libname, product in upstream:
-        # ... configure build for &#39;key&#39; to use &#39;product&#39; for &#39;libname&#39;
-    # all upstream builds have completed
-    # ... run build for &#39;key&#39;
-    return build_product_for_key
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">upstream</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">libname</span><span class="p">,</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">upstream</span><span class="p">:</span>
+        <span class="c1"># ... configure build for &#39;key&#39; to use &#39;product&#39; for &#39;libname&#39;</span>
+    <span class="c1"># all upstream builds have completed</span>
+    <span class="c1"># ... run build for &#39;key&#39;</span>
+    <span class="k">return</span> <span class="n">build_product_for_key</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="#eventlet.dagpool.DAGPool.spawn" title="eventlet.dagpool.DAGPool.spawn"><code class="xref py py-meth docutils literal"><span class="pre">spawn</span></code></a> all these greenthreads:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pool</span> <span class="o">=</span> <span class="n">DAGPool</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">DAGPool</span><span class="p">()</span>
 <span class="c1"># the upstream producer keys passed to spawn() can be from any iterable,</span>
 <span class="c1"># including a generator</span>
 <span class="n">pool</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">),</span> <span class="n">builder</span><span class="p">)</span>
@@ -150,7 +151,7 @@ as this:</p>
 <p>As with <a class="reference internal" href="../basic_usage.html#eventlet.spawn" title="eventlet.spawn"><code class="xref py py-func docutils literal"><span class="pre">eventlet.spawn()</span></code></a>, if you need to pass special
 build flags to some set of builds, these can be passed as either positional or
 keyword arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">upstream</span><span class="p">,</span> <span class="n">cflags</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">linkflags</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">upstream</span><span class="p">,</span> <span class="n">cflags</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">linkflags</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
     <span class="o">...</span>
 
 <span class="n">pool</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">),</span> <span class="n">builder</span><span class="p">,</span> <span class="s2">&quot;-o2&quot;</span><span class="p">)</span>
@@ -160,7 +161,7 @@ keyword arguments:</p>
 <p>However, if the arguments to each builder() call are uniform (as in the
 original example), you could alternatively build a dict of the dependencies
 and call <a class="reference internal" href="#eventlet.dagpool.DAGPool.spawn_many" title="eventlet.dagpool.DAGPool.spawn_many"><code class="xref py py-meth docutils literal"><span class="pre">spawn_many()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">deps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">),</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">deps</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">),</span>
             <span class="n">e</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">],</span>
             <span class="n">b</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;zlib&quot;</span><span class="p">),</span>
             <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;zlib&quot;</span><span class="p">],</span>
@@ -173,32 +174,32 @@ for any of the build greenthreads) in any of several ways.</p>
 <p><a class="reference internal" href="#eventlet.dagpool.DAGPool.waitall" title="eventlet.dagpool.DAGPool.waitall"><code class="xref py py-meth docutils literal"><span class="pre">pool.waitall()</span></code></a> waits until the last of the spawned
 greenthreads has completed, and returns a dict containing results for <em>all</em> of
 them:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">waitall</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;for d: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;for e: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">]))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">waitall</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;for d: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;for e: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>waitall() is an alias for <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait" title="eventlet.dagpool.DAGPool.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> with no arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;for d: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;for e: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">]))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;for d: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;for e: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>Or you can specifically wait for only the final programs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The returned dict will contain only the specified keys. The keys may be passed
 into wait() from any iterable, including a generator.</p>
 <p>You can wait for any specified set of greenthreads; they need not be
 topologically last:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># returns as soon as both a and zlib have returned results, regardless of</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># returns as soon as both a and zlib have returned results, regardless of</span>
 <span class="c1"># what else is still running</span>
 <span class="n">leaves</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;zlib&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Suppose you want to wait specifically for just <em>one</em> of the final programs:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">])</span>
 <span class="n">dprog</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -206,20 +207,20 @@ topologically last:</p>
 regardless of whether greenthread e has finished.</p>
 <p><a class="reference internal" href="#eventlet.dagpool.DAGPool.__getitem__" title="eventlet.dagpool.DAGPool.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem()__</span></code></a> is shorthand for
 obtaining a single result:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># waits until greenthread d returns its result</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># waits until greenthread d returns its result</span>
 <span class="n">dprog</span> <span class="o">=</span> <span class="n">pool</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In contrast, <a class="reference internal" href="#eventlet.dagpool.DAGPool.get" title="eventlet.dagpool.DAGPool.get"><code class="xref py py-meth docutils literal"><span class="pre">get()</span></code></a> returns immediately,
 whether or not a result is ready:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># returns immediately</span>
-<span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># returns immediately</span>
+<span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="o">...</span>
 </pre></div>
 </div>
 <p>Of course, your greenthread might not include an explicit return statement and
 hence might implicitly return None. You might have to test some other value.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># returns immediately</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># returns immediately</span>
 <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;notdone&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;notdone&quot;</span><span class="p">:</span>
     <span class="o">...</span>
 </pre></div>
@@ -227,17 +228,17 @@ hence might implicitly return None. You might have to test some other value.</p>
 <p>Suppose you want to process each of the final programs in some way (upload
 it?), but you don&#8217;t want to have to wait until they&#8217;ve both finished. You
 don&#8217;t have to poll get() calls &#8211; use <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait_each" title="eventlet.dagpool.DAGPool.wait_each"><code class="xref py py-meth docutils literal"><span class="pre">wait_each()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, result in pool.wait_each([&quot;d&quot;, &quot;e&quot;]):
-    # key will be d or e, in completion order
-    # process result...
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">]):</span>
+    <span class="c1"># key will be d or e, in completion order</span>
+    <span class="c1"># process result...</span>
 </pre></div>
 </div>
 <p>As with <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait" title="eventlet.dagpool.DAGPool.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a>, if you omit the
 argument to wait_each(), it delivers results for all the greenthreads of which
 it&#8217;s aware:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, result in pool.wait_each():
-    # key will be a, zlib, b, c, d, e, in whatever order each completes
-    # process its result...
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each</span><span class="p">():</span>
+    <span class="c1"># key will be a, zlib, b, c, d, e, in whatever order each completes</span>
+    <span class="c1"># process its result...</span>
 </pre></div>
 </div>
 </div>
@@ -248,54 +249,54 @@ the dependencies shown above. To your consternation, your <a class="reference in
 is stuck!</p>
 <p>You could change waitall() to <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait_each" title="eventlet.dagpool.DAGPool.wait_each"><code class="xref py py-meth docutils literal"><span class="pre">wait_each()</span></code></a>, and print each key as it becomes
 available:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;got result for {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;got result for </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
     <span class="c1"># ... process ...</span>
 </pre></div>
 </div>
 <p>Once the build for a has completed, this produces:</p>
-<div class="highlight-python"><div class="highlight"><pre>got result for a
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">got</span> <span class="n">result</span> <span class="k">for</span> <span class="n">a</span>
 </pre></div>
 </div>
 <p>and then stops. Hmm!</p>
 <p>You can check the number of <a class="reference internal" href="#eventlet.dagpool.DAGPool.running" title="eventlet.dagpool.DAGPool.running"><code class="xref py py-meth docutils literal"><span class="pre">running</span></code></a>
 greenthreads:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">running</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">running</span><span class="p">())</span>
 <span class="go">4</span>
 </pre></div>
 </div>
 <p>and the number of <a class="reference internal" href="#eventlet.dagpool.DAGPool.waiting" title="eventlet.dagpool.DAGPool.waiting"><code class="xref py py-meth docutils literal"><span class="pre">waiting</span></code></a>
 greenthreads:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting</span><span class="p">())</span>
 <span class="go">4</span>
 </pre></div>
 </div>
 <p>It&#8217;s often more informative to ask <em>which</em> greenthreads are <a class="reference internal" href="#eventlet.dagpool.DAGPool.running_keys" title="eventlet.dagpool.DAGPool.running_keys"><code class="xref py py-meth docutils literal"><span class="pre">still</span>
 <span class="pre">running</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">running_keys</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">running_keys</span><span class="p">())</span>
 <span class="go">(&#39;c&#39;, &#39;b&#39;, &#39;e&#39;, &#39;d&#39;)</span>
 </pre></div>
 </div>
 <p>but in this case, we already know a has completed.</p>
 <p>We can ask for all available results:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="go">(&#39;a&#39;,)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 <span class="go">((&#39;a&#39;, result_from_a),)</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="#eventlet.dagpool.DAGPool.keys" title="eventlet.dagpool.DAGPool.keys"><code class="xref py py-meth docutils literal"><span class="pre">keys()</span></code></a> and <a class="reference internal" href="#eventlet.dagpool.DAGPool.items" title="eventlet.dagpool.DAGPool.items"><code class="xref py py-meth docutils literal"><span class="pre">items()</span></code></a> methods only return keys and items for
 which results are actually available, reflecting the underlying dict.</p>
 <p>But what&#8217;s blocking the works? What are we <a class="reference internal" href="#eventlet.dagpool.DAGPool.waiting_for" title="eventlet.dagpool.DAGPool.waiting_for"><code class="xref py py-meth docutils literal"><span class="pre">waiting</span> <span class="pre">for</span></code></a>?</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">))</span>
 <span class="go">set([&#39;c&#39;, &#39;b&#39;])</span>
 </pre></div>
 </div>
 <p>(waiting_for()&#8217;s optional argument is a <em>single</em> key.)</p>
 <p>That doesn&#8217;t help much yet...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">))</span>
 <span class="go">set([&#39;zlib&#39;])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">))</span>
 <span class="go">KeyError: &#39;zlib&#39;</span>
 </pre></div>
 </div>
@@ -304,14 +305,14 @@ configuring this DAGPool!</p>
 <p>(For non-interactive use, it would be more informative to omit waiting_for()&#8217;s
 argument. This usage returns a dict indicating, for each greenthread key,
 which other keys it&#8217;s waiting for.)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
 <span class="n">pprint</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">waiting_for</span><span class="p">())</span>
 
 <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;zlib&#39;</span><span class="p">]),</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;zlib&#39;</span><span class="p">]),</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]),</span> <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;c&#39;</span><span class="p">])}</span>
 </pre></div>
 </div>
 <p>In this case, a reasonable fix would be to spawn the zlib greenthread:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pool</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="n">builder</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pool</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="n">builder</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Even if this is the last method call on this DAGPool instance, it should
@@ -322,7 +323,7 @@ unblock all the rest of the DAGPool greenthreads.</p>
 <p>If we happen to have zlib build results in hand already, though, we could
 instead <a class="reference internal" href="#eventlet.dagpool.DAGPool.post" title="eventlet.dagpool.DAGPool.post"><code class="xref py py-meth docutils literal"><span class="pre">post()</span></code></a> that result instead of
 rebuilding the library:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pool</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">,</span> <span class="n">result_from_zlib</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pool</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;zlib&quot;</span><span class="p">,</span> <span class="n">result_from_zlib</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This, too, should unblock the rest of the DAGPool greenthreads.</p>
@@ -335,7 +336,7 @@ off rather than having to rebuild everything prior to that point.</p>
 <p>You could iteratively <a class="reference internal" href="#eventlet.dagpool.DAGPool.post" title="eventlet.dagpool.DAGPool.post"><code class="xref py py-meth docutils literal"><span class="pre">post()</span></code></a> those
 prior results into a new DAGPool instance; alternatively you can
 <a class="reference internal" href="#eventlet.dagpool.DAGPool.__init__" title="eventlet.dagpool.DAGPool.__init__"><code class="xref py py-meth docutils literal"><span class="pre">preload</span></code></a> the <a class="reference internal" href="#eventlet.dagpool.DAGPool" title="eventlet.dagpool.DAGPool"><code class="xref py py-class docutils literal"><span class="pre">DAGPool</span></code></a> from an existing dict:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pool</span> <span class="o">=</span> <span class="n">DAGPool</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">result_from_a</span><span class="p">,</span> <span class="n">zlib</span><span class="o">=</span><span class="n">result_from_zlib</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">DAGPool</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">result_from_a</span><span class="p">,</span> <span class="n">zlib</span><span class="o">=</span><span class="n">result_from_zlib</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Any DAGPool greenthreads that depend on either a or zlib can immediately
@@ -347,8 +348,8 @@ consume those results.</p>
 <p>But what if we spawn a zlib build that fails? Suppose the zlib greenthread
 terminates with an exception? In that case none of b, c, d or e can proceed!
 Nor do we want to wait forever for them.</p>
-<div class="highlight-python"><div class="highlight"><pre>dprog = pool[&quot;d&quot;]
-eventlet.dagpool.PropagateError: PropagateError(d): PropagateError: PropagateError(c): PropagateError: PropagateError(zlib): OriginalError
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dprog</span> <span class="o">=</span> <span class="n">pool</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span>
+<span class="n">eventlet</span><span class="o">.</span><span class="n">dagpool</span><span class="o">.</span><span class="n">PropagateError</span><span class="p">:</span> <span class="n">PropagateError</span><span class="p">(</span><span class="n">d</span><span class="p">):</span> <span class="n">PropagateError</span><span class="p">:</span> <span class="n">PropagateError</span><span class="p">(</span><span class="n">c</span><span class="p">):</span> <span class="n">PropagateError</span><span class="p">:</span> <span class="n">PropagateError</span><span class="p">(</span><span class="n">zlib</span><span class="p">):</span> <span class="n">OriginalError</span>
 </pre></div>
 </div>
 <p>DAGPool provides a <a class="reference internal" href="#eventlet.dagpool.PropagateError" title="eventlet.dagpool.PropagateError"><code class="xref py py-class docutils literal"><span class="pre">PropagateError</span></code></a>
@@ -359,8 +360,8 @@ greenthread and whose <em>exc</em> attribute is the exception that terminated it
 This PropagateError is stored as the result from that greenthread.</p>
 <p>Attempting to consume the result from a greenthread for which a PropagateError
 was stored raises that PropagateError.</p>
-<div class="highlight-python"><div class="highlight"><pre>pool[&quot;zlib&quot;]
-eventlet.dagpool.PropagateError: PropagateError(zlib): OriginalError
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pool</span><span class="p">[</span><span class="s2">&quot;zlib&quot;</span><span class="p">]</span>
+<span class="n">eventlet</span><span class="o">.</span><span class="n">dagpool</span><span class="o">.</span><span class="n">PropagateError</span><span class="p">:</span> <span class="n">PropagateError</span><span class="p">(</span><span class="n">zlib</span><span class="p">):</span> <span class="n">OriginalError</span>
 </pre></div>
 </div>
 <p>Thus, when greenthread c attempts to consume the result from zlib, the
@@ -375,7 +376,7 @@ whose <em>key</em> is d and whose <em>exc</em> is the PropagateError for c.</p>
 PropagateError for d is raised.</p>
 <p>You can programmatically chase the failure path to determine the original
 failure if desired:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">orig_err</span> <span class="o">=</span> <span class="n">err</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">orig_err</span> <span class="o">=</span> <span class="n">err</span>
 <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
 <span class="k">while</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">orig_err</span><span class="p">,</span> <span class="n">PropagateError</span><span class="p">):</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">orig_err</span><span class="o">.</span><span class="n">key</span>
@@ -390,24 +391,24 @@ results that will never arrive.</p>
 <p>However, it does make it difficult to obtain <em>partial</em> results for builds that
 <em>did</em> succeed.</p>
 <p>For that you can call <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait_each_success" title="eventlet.dagpool.DAGPool.wait_each_success"><code class="xref py py-meth docutils literal"><span class="pre">wait_each_success()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, result in pool.wait_each_success():
-    print(&quot;{0} succeeded&quot;.format(key))
-    # ... process result ...
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each_success</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> succeeded&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+    <span class="c1"># ... process result ...</span>
 
-a succeeded
+<span class="n">a</span> <span class="n">succeeded</span>
 </pre></div>
 </div>
 <p>Another problem is that although five different greenthreads failed in the
 example, we only see one chain of failures. You can enumerate the bad news
 with <a class="reference internal" href="#eventlet.dagpool.DAGPool.wait_each_exception" title="eventlet.dagpool.DAGPool.wait_each_exception"><code class="xref py py-meth docutils literal"><span class="pre">wait_each_exception()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, err in pool.wait_each_exception():
-    print(&quot;{0} failed with {1}&quot;.format(key, err.exc.__class__.__name__))
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each_exception</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> failed with </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
 
-c failed with PropagateError
-b failed with PropagateError
-e failed with PropagateError
-d failed with PropagateError
-zlib failed with OriginalError
+<span class="n">c</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
+<span class="n">b</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
+<span class="n">e</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
+<span class="n">d</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
+<span class="n">zlib</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">OriginalError</span>
 </pre></div>
 </div>
 <p>wait_each_exception() yields each PropagateError wrapper as if it were the
@@ -416,16 +417,16 @@ result, rather than raising it as an exception.</p>
 <code class="code docutils literal"><span class="pre">err.__class__.__name__</span></code> is always PropagateError.</p>
 <p>Both wait_each_success() and wait_each_exception() can accept an iterable of
 keys to report:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, result in pool.wait_each_success([&quot;d&quot;, &quot;e&quot;]):
-    print(&quot;{0} succeeded&quot;.format(key))
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each_success</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> succeeded&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
 
-(no output)
+<span class="p">(</span><span class="n">no</span> <span class="n">output</span><span class="p">)</span>
 
-for key, err in pool.wait_each_exception([&quot;d&quot;, &quot;e&quot;]):
-    print(&quot;{0} failed with {1}&quot;.format(key, err.exc.__class__.__name__))
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">pool</span><span class="o">.</span><span class="n">wait_each_exception</span><span class="p">([</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> failed with </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
 
-e failed with PropagateError
-d failed with PropagateError
+<span class="n">e</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
+<span class="n">d</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">PropagateError</span>
 </pre></div>
 </div>
 <p>Both wait_each_success() and wait_each_exception() must wait until the
@@ -667,9 +668,9 @@ each of the ready ones in arbitrary order before blocking again.</p>
 its own greenthreads and one provided by a <a class="reference internal" href="#eventlet.dagpool.DAGPool.post" title="eventlet.dagpool.DAGPool.post"><code class="xref py py-meth docutils literal"><span class="pre">post()</span></code></a> call or <em>preload</em> data.</p>
 <p>The wait_each() generator terminates (raises StopIteration) when all
 specified keys have been delivered. Thus, typical usage might be:</p>
-<div class="highlight-python"><div class="highlight"><pre>for key, value in dagpool.wait_each(keys):
-    # process this ready key and value
-# continue processing now that we&#39;ve gotten values for all keys
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dagpool</span><span class="o">.</span><span class="n">wait_each</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+    <span class="c1"># process this ready key and value</span>
+<span class="c1"># continue processing now that we&#39;ve gotten values for all keys</span>
 </pre></div>
 </div>
 <p>By implication, if you pass wait_each() an empty iterable of keys, it
@@ -789,21 +790,18 @@ PropagateError.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/modules/dagpool.txt"
+      <li><a href="../_sources/modules/dagpool.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -825,14 +823,14 @@ PropagateError.</p>
         <li class="right" >
           <a href="corolocal.html" title="corolocal – Coroutine local storage"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Module Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >Module Reference</a> &#187;</li> 
       </ul>
     </div>
 
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2010, Eventlet Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2005-2010, Eventlet Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

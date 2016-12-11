@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>eventlet.green.zmq – ØMQ support &mdash; Eventlet 0.20.0 documentation</title>
+    <title>eventlet.green.zmq – ØMQ support &#8212; Eventlet 0.20.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.20.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Eventlet 0.20.0 documentation" href="../index.html" />
-    <link rel="up" title="Module Reference" href="../modules.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Authors" href="../authors.html" />
     <link rel="prev" title="wsgi – WSGI server" href="wsgi.html" /> 
   </head>
@@ -44,8 +45,8 @@
         <li class="right" >
           <a href="wsgi.html" title="wsgi – WSGI server"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Module Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" accesskey="U">Module Reference</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -104,22 +105,22 @@ is deferred to the hub (using <a class="reference internal" href="../hubs.html#e
 <code class="descname">recv</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receive a message.</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
 will raise a ZMQError with EAGAIN if a message is not ready.
 If NOBLOCK is not set, then this method will block until a
 message arrives.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be received in a copying or non-copying manner?
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be received in a copying or non-copying manner?
 If False a Frame object is returned, if True a string copy of
 message is returned.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be tracked for notification that ZMQ has
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be tracked for notification that ZMQ has
 finished with it? (ignored if copy=True)</dd>
 </dl>
 <dl class="docutils">
-<dt>msg <span class="classifier-delimiter">:</span> <span class="classifier">bytes, Frame</span></dt>
-<dd>The received message frame.  If <cite>copy</cite> is False, then it will be a Frame,
+<dt>msg</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bytes, Frame</span><dd>The received message frame.  If <cite>copy</cite> is False, then it will be a Frame,
 otherwise it will be bytes.</dd>
 </dl>
 <dl class="docutils">
@@ -134,21 +135,21 @@ otherwise it will be bytes.</dd>
 <dd><p>Send a message on this socket.</p>
 <p>This queues the message to be sent by the IO thread at a later time.</p>
 <dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">object, str, Frame</span></dt>
-<dd>The content of the message.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any supported flag: NOBLOCK, SNDMORE.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be sent in a copying or non-copying manner.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be tracked for notification that ZMQ has
+<dt>data</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">object, str, Frame</span><dd>The content of the message.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any supported flag: NOBLOCK, SNDMORE.</dd>
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be sent in a copying or non-copying manner.</dd>
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be tracked for notification that ZMQ has
 finished with it? (ignored if copy=True)</dd>
 </dl>
 <dl class="docutils">
-<dt>None <span class="classifier-delimiter">:</span> <span class="classifier">if <cite>copy</cite> or not track</span></dt>
-<dd>None if message was sent, raises an exception otherwise.</dd>
-<dt>MessageTracker <span class="classifier-delimiter">:</span> <span class="classifier">if track and not copy</span></dt>
-<dd>a MessageTracker object, whose <cite>pending</cite> property will
+<dt>None</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if <cite>copy</cite> or not track</span><dd>None if message was sent, raises an exception otherwise.</dd>
+<dt>MessageTracker</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if track and not copy</span><dd>a MessageTracker object, whose <cite>pending</cite> property will
 be True until the send is completed.</dd>
 </dl>
 <dl class="docutils">
@@ -169,8 +170,8 @@ be True until the send is completed.</dd>
 other side of this connection will use <code class="docutils literal"><span class="pre">Socket.connect(addr)</span></code> to
 connect to this socket.</p>
 <dl class="docutils">
-<dt>addr <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
 for example &#8216;tcp://127.0.0.1:5555&#8217;. Protocols supported include
 tcp, udp, pgm, epgm, inproc and ipc. If the address is unicode, it is
 encoded to utf-8 first.</dd>
@@ -182,18 +183,18 @@ encoded to utf-8 first.</dd>
 <code class="descname">bind_to_random_port</code><span class="sig-paren">(</span><em>addr</em>, <em>min_port=49152</em>, <em>max_port=65536</em>, <em>max_tries=100</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.bind_to_random_port" title="Permalink to this definition">¶</a></dt>
 <dd><p>bind this socket to a random port in a range</p>
 <dl class="docutils">
-<dt>addr <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The address string without the port to pass to <code class="docutils literal"><span class="pre">Socket.bind()</span></code>.</dd>
-<dt>min_port <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>The minimum port in the range of ports to try (inclusive).</dd>
-<dt>max_port <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>The maximum port in the range of ports to try (exclusive).</dd>
-<dt>max_tries <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>The maximum number of bind attempts to make.</dd>
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string without the port to pass to <code class="docutils literal"><span class="pre">Socket.bind()</span></code>.</dd>
+<dt>min_port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The minimum port in the range of ports to try (inclusive).</dd>
+<dt>max_port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The maximum port in the range of ports to try (exclusive).</dd>
+<dt>max_tries</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The maximum number of bind attempts to make.</dd>
 </dl>
 <dl class="docutils">
-<dt>port <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The port the socket was bound to.</dd>
+<dt>port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The port the socket was bound to.</dd>
 </dl>
 <dl class="docutils">
 <dt>ZMQBindError</dt>
@@ -216,8 +217,8 @@ garbage collected.</p>
 <code class="descname">connect</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to a remote 0MQ socket.</p>
 <dl class="docutils">
-<dt>addr <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
 for example &#8216;tcp://127.0.0.1:5555&#8217;. Protocols supported are
 tcp, upd, pgm, inproc and ipc. If the address is unicode, it is
 encoded to utf-8 first.</dd>
@@ -230,8 +231,8 @@ encoded to utf-8 first.</dd>
 <dd><p>Disconnect from a remote 0MQ socket (undoes a call to connect).</p>
 <p>This feature requires libzmq-3</p>
 <dl class="docutils">
-<dt>addr <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
 for example &#8216;tcp://127.0.0.1:5555&#8217;. Protocols supported are
 tcp, upd, pgm, inproc and ipc. If the address is unicode, it is
 encoded to utf-8 first.</dd>
@@ -244,17 +245,17 @@ encoded to utf-8 first.</dd>
 <dd><p>Get the value of a socket option.</p>
 <p>See the 0MQ API documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first">The option to get.  Available values will depend on your
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to get.  Available values will depend on your
 version of libzmq.  Examples include:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">zmq</span><span class="o">.</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span><span class="p">,</span> <span class="n">EVENTS</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span><span class="p">,</span> <span class="n">EVENTS</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 <dl class="docutils">
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span></dt>
-<dd>The value of the option as a bytestring or int.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option as a bytestring or int.</dd>
 </dl>
 </dd></dl>
 
@@ -271,13 +272,13 @@ version of libzmq.  Examples include:</p>
 <dd><p>get the value of a socket option</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The option to retrieve. Currently, IDENTITY is the only
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
 gettable option that can return a string.</dd>
 </dl>
 <dl class="docutils">
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option as a unicode string.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
 </dl>
 </dd></dl>
 
@@ -288,17 +289,17 @@ gettable option that can return a string.</dd>
 <p>Get the value of a socket option.</p>
 <p>See the 0MQ API documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first">The option to get.  Available values will depend on your
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to get.  Available values will depend on your
 version of libzmq.  Examples include:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">zmq</span><span class="o">.</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span><span class="p">,</span> <span class="n">EVENTS</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span><span class="p">,</span> <span class="n">EVENTS</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 <dl class="docutils">
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span></dt>
-<dd>The value of the option as a bytestring or int.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option as a bytestring or int.</dd>
 </dl>
 </dd></dl>
 
@@ -308,13 +309,13 @@ version of libzmq.  Examples include:</p>
 <dd><p>get the value of a socket option</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The option to retrieve. Currently, IDENTITY is the only
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
 gettable option that can return a string.</dd>
 </dl>
 <dl class="docutils">
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option as a unicode string.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
 </dl>
 </dd></dl>
 
@@ -324,13 +325,13 @@ gettable option that can return a string.</dd>
 <dd><p>get the value of a socket option</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The option to retrieve. Currently, IDENTITY is the only
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
 gettable option that can return a string.</dd>
 </dl>
 <dl class="docutils">
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option as a unicode string.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
 </dl>
 </dd></dl>
 
@@ -348,16 +349,16 @@ gettable option that can return a string.</dd>
 <p>The default is to poll forever for incoming
 events.  Timeout is in milliseconds, if specified.</p>
 <dl class="docutils">
-<dt>timeout <span class="classifier-delimiter">:</span> <span class="classifier">int [default: None]</span></dt>
-<dd>The timeout (in milliseconds) to wait for an event. If unspecified
+<dt>timeout</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int [default: None]</span><dd>The timeout (in milliseconds) to wait for an event. If unspecified
 (or secified None), will wait forever for an event.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int) [default: POLLIN]</span></dt>
-<dd>The event flags to poll for (any combination of POLLIN|POLLOUT).
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int) [default: POLLIN]</span><dd>The event flags to poll for (any combination of POLLIN|POLLOUT).
 The default is to check for incoming events (POLLIN).</dd>
 </dl>
 <dl class="docutils">
-<dt>events <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int)</span></dt>
-<dd>The events that are ready and waiting.  Will be 0 if no events were ready
+<dt>events</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int)</span><dd>The events that are ready and waiting.  Will be 0 if no events were ready
 by the time timeout was reached.</dd>
 </dl>
 </dd></dl>
@@ -367,22 +368,22 @@ by the time timeout was reached.</dd>
 <code class="descname">recv</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span></dt>
 <dd><p>Receive a message.</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
 will raise a ZMQError with EAGAIN if a message is not ready.
 If NOBLOCK is not set, then this method will block until a
 message arrives.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be received in a copying or non-copying manner?
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be received in a copying or non-copying manner?
 If False a Frame object is returned, if True a string copy of
 message is returned.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be tracked for notification that ZMQ has
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be tracked for notification that ZMQ has
 finished with it? (ignored if copy=True)</dd>
 </dl>
 <dl class="docutils">
-<dt>msg <span class="classifier-delimiter">:</span> <span class="classifier">bytes, Frame</span></dt>
-<dd>The received message frame.  If <cite>copy</cite> is False, then it will be a Frame,
+<dt>msg</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bytes, Frame</span><dd>The received message frame.  If <cite>copy</cite> is False, then it will be a Frame,
 otherwise it will be bytes.</dd>
 </dl>
 <dl class="docutils">
@@ -396,12 +397,12 @@ otherwise it will be bytes.</dd>
 <code class="descname">recv_json</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>receive a Python object as a message using json to serialize</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid recv flag.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
 </dl>
 <dl class="docutils">
-<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span></dt>
-<dd>The Python object that arrives as a message.</dd>
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object that arrives as a message.</dd>
 </dl>
 </dd></dl>
 
@@ -410,22 +411,22 @@ otherwise it will be bytes.</dd>
 <code class="descname">recv_multipart</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv_multipart" title="Permalink to this definition">¶</a></dt>
 <dd><p>receive a multipart message as a list of bytes or Frame objects</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
 will raise a ZMQError with EAGAIN if a message is not ready.
 If NOBLOCK is not set, then this method will block until a
 message arrives.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd>Should the message frame(s) be received in a copying or non-copying manner?
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the message frame(s) be received in a copying or non-copying manner?
 If False a Frame object is returned for each part, if True a copy of
 the bytes is made for each frame.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd>Should the message frame(s) be tracked for notification that ZMQ has
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the message frame(s) be tracked for notification that ZMQ has
 finished with it? (ignored if copy=True)</dd>
 </dl>
 <dl class="docutils">
-<dt>msg_parts <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>A list of frames in the multipart message; either Frames or bytes,
+<dt>msg_parts</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd>A list of frames in the multipart message; either Frames or bytes,
 depending on <cite>copy</cite>.</dd>
 </dl>
 </dd></dl>
@@ -435,12 +436,12 @@ depending on <cite>copy</cite>.</dd>
 <code class="descname">recv_pyobj</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv_pyobj" title="Permalink to this definition">¶</a></dt>
 <dd><p>receive a Python object as a message using pickle to serialize</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid recv flag.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
 </dl>
 <dl class="docutils">
-<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span></dt>
-<dd>The Python object that arrives as a message.</dd>
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object that arrives as a message.</dd>
 </dl>
 </dd></dl>
 
@@ -449,14 +450,14 @@ depending on <cite>copy</cite>.</dd>
 <code class="descname">recv_string</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>receive a unicode string, as sent by send_string</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid recv flag.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span></dt>
-<dd>The encoding to be used</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
 </dl>
 <dl class="docutils">
-<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The Python unicode string that arrives as encoded bytes.</dd>
+<dt>s</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The Python unicode string that arrives as encoded bytes.</dd>
 </dl>
 </dd></dl>
 
@@ -465,14 +466,14 @@ depending on <cite>copy</cite>.</dd>
 <code class="descname">recv_unicode</code><span class="sig-paren">(</span><em>flags=0</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.recv_unicode" title="Permalink to this definition">¶</a></dt>
 <dd><p>receive a unicode string, as sent by send_string</p>
 <dl class="docutils">
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid recv flag.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span></dt>
-<dd>The encoding to be used</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
 </dl>
 <dl class="docutils">
-<dt>s <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The Python unicode string that arrives as encoded bytes.</dd>
+<dt>s</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The Python unicode string that arrives as encoded bytes.</dd>
 </dl>
 </dd></dl>
 
@@ -482,21 +483,21 @@ depending on <cite>copy</cite>.</dd>
 <dd><p>Send a message on this socket.</p>
 <p>This queues the message to be sent by the IO thread at a later time.</p>
 <dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">object, str, Frame</span></dt>
-<dd>The content of the message.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any supported flag: NOBLOCK, SNDMORE.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be sent in a copying or non-copying manner.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>Should the message be tracked for notification that ZMQ has
+<dt>data</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">object, str, Frame</span><dd>The content of the message.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any supported flag: NOBLOCK, SNDMORE.</dd>
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be sent in a copying or non-copying manner.</dd>
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool</span><dd>Should the message be tracked for notification that ZMQ has
 finished with it? (ignored if copy=True)</dd>
 </dl>
 <dl class="docutils">
-<dt>None <span class="classifier-delimiter">:</span> <span class="classifier">if <cite>copy</cite> or not track</span></dt>
-<dd>None if message was sent, raises an exception otherwise.</dd>
-<dt>MessageTracker <span class="classifier-delimiter">:</span> <span class="classifier">if track and not copy</span></dt>
-<dd>a MessageTracker object, whose <cite>pending</cite> property will
+<dt>None</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if <cite>copy</cite> or not track</span><dd>None if message was sent, raises an exception otherwise.</dd>
+<dt>MessageTracker</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if track and not copy</span><dd>a MessageTracker object, whose <cite>pending</cite> property will
 be True until the send is completed.</dd>
 </dl>
 <dl class="docutils">
@@ -514,10 +515,10 @@ be True until the send is completed.</dd>
 <code class="descname">send_json</code><span class="sig-paren">(</span><em>msg_parts</em>, <em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.send_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>send a Python object as a message using json to serialize</p>
 <dl class="docutils">
-<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span></dt>
-<dd>The Python object to send.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid send flag.</dd>
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid send flag.</dd>
 </dl>
 </dd></dl>
 
@@ -526,15 +527,15 @@ be True until the send is completed.</dd>
 <code class="descname">send_multipart</code><span class="sig-paren">(</span><em>msg_parts</em>, <em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.send_multipart" title="Permalink to this definition">¶</a></dt>
 <dd><p>send a sequence of buffers as a multipart message</p>
 <dl class="docutils">
-<dt>msg_parts <span class="classifier-delimiter">:</span> <span class="classifier">iterable</span></dt>
-<dd>A sequence of objects to send as a multipart message. Each element
+<dt>msg_parts</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">iterable</span><dd>A sequence of objects to send as a multipart message. Each element
 can be any sendable object (Frame, bytes, buffer-providers)</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>SNDMORE is handled automatically for frames before the last.</dd>
-<dt>copy <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd>Should the frame(s) be sent in a copying or non-copying manner.</dd>
-<dt>track <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd>Should the frame(s) be tracked for notification that ZMQ has
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>SNDMORE is handled automatically for frames before the last.</dd>
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the frame(s) be sent in a copying or non-copying manner.</dd>
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the frame(s) be tracked for notification that ZMQ has
 finished with it (ignored if copy=True).</dd>
 </dl>
 <p>None : if copy or not track
@@ -549,12 +550,12 @@ be True until the last send is completed.</div></blockquote>
 <code class="descname">send_pyobj</code><span class="sig-paren">(</span><em>msg_parts</em>, <em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#eventlet.green.zmq.Socket.send_pyobj" title="Permalink to this definition">¶</a></dt>
 <dd><p>send a Python object as a message using pickle to serialize</p>
 <dl class="docutils">
-<dt>obj <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span></dt>
-<dd>The Python object to send.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Any valid send flag.</dd>
-<dt>protocol <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The pickle protocol number to use. Default of -1 will select
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid send flag.</dd>
+<dt>protocol</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The pickle protocol number to use. Default of -1 will select
 the highest supported number. Use 0 for multiple platform
 support.</dd>
 </dl>
@@ -567,12 +568,12 @@ support.</dd>
 <p>0MQ communicates with raw bytes, so you must encode/decode
 text (unicode on py2, str on py3) around 0MQ.</p>
 <dl class="docutils">
-<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The unicode string to send.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>Any valid send flag.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span></dt>
-<dd>The encoding to be used</dd>
+<dt>u</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span><dd>The unicode string to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any valid send flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
 </dl>
 </dd></dl>
 
@@ -583,12 +584,12 @@ text (unicode on py2, str on py3) around 0MQ.</p>
 <p>0MQ communicates with raw bytes, so you must encode/decode
 text (unicode on py2, str on py3) around 0MQ.</p>
 <dl class="docutils">
-<dt>u <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The unicode string to send.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>Any valid send flag.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span></dt>
-<dd>The encoding to be used</dd>
+<dt>u</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span><dd>The unicode string to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any valid send flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
 </dl>
 </dd></dl>
 
@@ -598,15 +599,15 @@ text (unicode on py2, str on py3) around 0MQ.</p>
 <dd><p>Set socket options.</p>
 <p>See the 0MQ API documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first">The option to set.  Available values will depend on your
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to set.  Available values will depend on your
 version of libzmq.  Examples include:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span>
 </pre></div>
 </div>
 </dd>
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span></dt>
-<dd>The value of the option to set.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option to set.</dd>
 </dl>
 </dd></dl>
 
@@ -624,13 +625,13 @@ version of libzmq.  Examples include:</p>
 <p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
 UNSUBSCRIBE, IDENTITY</dd>
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option to set.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The encoding to be used, default is utf8</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
 </dl>
 </dd></dl>
 
@@ -641,15 +642,15 @@ UNSUBSCRIBE, IDENTITY</dd>
 <p>Set socket options.</p>
 <p>See the 0MQ API documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first">The option to set.  Available values will depend on your
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to set.  Available values will depend on your
 version of libzmq.  Examples include:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span>
 </pre></div>
 </div>
 </dd>
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span></dt>
-<dd>The value of the option to set.</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option to set.</dd>
 </dl>
 </dd></dl>
 
@@ -660,13 +661,13 @@ version of libzmq.  Examples include:</p>
 <p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
 UNSUBSCRIBE, IDENTITY</dd>
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option to set.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The encoding to be used, default is utf8</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
 </dl>
 </dd></dl>
 
@@ -677,13 +678,13 @@ UNSUBSCRIBE, IDENTITY</dd>
 <p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
 <p>See the 0MQ documentation for details on specific options.</p>
 <dl class="docutils">
-<dt>option <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
 UNSUBSCRIBE, IDENTITY</dd>
-<dt>optval <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span></dt>
-<dd>The value of the option to set.</dd>
-<dt>encoding <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The encoding to be used, default is utf8</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
 </dl>
 </dd></dl>
 
@@ -693,8 +694,8 @@ UNSUBSCRIBE, IDENTITY</dd>
 <dd><p>Unbind from an address (undoes a call to bind).</p>
 <p>This feature requires libzmq-3</p>
 <dl class="docutils">
-<dt>addr <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string. This has the form &#8216;protocol://interface:port&#8217;,
 for example &#8216;tcp://127.0.0.1:5555&#8217;. Protocols supported are
 tcp, upd, pgm, inproc and ipc. If the address is unicode, it is
 encoded to utf-8 first.</dd>
@@ -750,8 +751,8 @@ but not require the argument for simpler applications:</p>
 <code class="descname">socket</code><span class="sig-paren">(</span><em>socket_type</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Context.socket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Socket associated with this Context.</p>
 <dl class="docutils">
-<dt>socket_type <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The socket type, which can be any of the 0MQ socket types: 
+<dt>socket_type</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The socket type, which can be any of the 0MQ socket types: 
 REQ, REP, PUB, SUB, PAIR, DEALER, ROUTER, PULL, PUSH, XSUB, XPUB.</dd>
 </dl>
 </dd></dl>
@@ -761,7 +762,380 @@ REQ, REP, PUB, SUB, PAIR, DEALER, ROUTER, PULL, PUSH, XSUB, XPUB.</dd>
 <dl class="class">
 <dt id="zmq.Socket">
 <em class="property">class </em><code class="descclassname">zmq.</code><code class="descname">Socket</code><a class="headerlink" href="#zmq.Socket" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="method">
+<dt id="zmq.Socket.bind_to_random_port">
+<code class="descname">bind_to_random_port</code><span class="sig-paren">(</span><em>addr</em>, <em>min_port=49152</em>, <em>max_port=65536</em>, <em>max_tries=100</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.bind_to_random_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>bind this socket to a random port in a range</p>
+<dl class="docutils">
+<dt>addr</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The address string without the port to pass to <code class="docutils literal"><span class="pre">Socket.bind()</span></code>.</dd>
+<dt>min_port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The minimum port in the range of ports to try (inclusive).</dd>
+<dt>max_port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The maximum port in the range of ports to try (exclusive).</dd>
+<dt>max_tries</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>The maximum number of bind attempts to make.</dd>
+</dl>
+<dl class="docutils">
+<dt>port</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The port the socket was bound to.</dd>
+</dl>
+<dl class="docutils">
+<dt>ZMQBindError</dt>
+<dd>if <cite>max_tries</cite> reached before successful bind</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.get_hwm">
+<code class="descname">get_hwm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.get_hwm" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the High Water Mark</p>
+<p>On libzmq ≥ 3.x, this gets SNDHWM if available, otherwise RCVHWM</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.get_string">
+<code class="descname">get_string</code><span class="sig-paren">(</span><em>option</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.get_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the value of a socket option</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
+gettable option that can return a string.</dd>
+</dl>
+<dl class="docutils">
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.getsockopt">
+<code class="descname">getsockopt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.getsockopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>s.get(option)</p>
+<p>Get the value of a socket option.</p>
+<p>See the 0MQ API documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to get.  Available values will depend on your
+version of libzmq.  Examples include:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span><span class="p">,</span> <span class="n">EVENTS</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="docutils">
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option as a bytestring or int.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.getsockopt_string">
+<code class="descname">getsockopt_string</code><span class="sig-paren">(</span><em>option</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.getsockopt_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the value of a socket option</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
+gettable option that can return a string.</dd>
+</dl>
+<dl class="docutils">
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.getsockopt_unicode">
+<code class="descname">getsockopt_unicode</code><span class="sig-paren">(</span><em>option</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.getsockopt_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the value of a socket option</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The option to retrieve. Currently, IDENTITY is the only
+gettable option that can return a string.</dd>
+</dl>
+<dl class="docutils">
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option as a unicode string.</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="zmq.Socket.hwm">
+<code class="descname">hwm</code><a class="headerlink" href="#zmq.Socket.hwm" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the High Water Mark</p>
+<p>On libzmq ≥ 3.x, this gets SNDHWM if available, otherwise RCVHWM</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.poll">
+<code class="descname">poll</code><span class="sig-paren">(</span><em>timeout=None</em>, <em>flags=1</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>poll the socket for events</p>
+<p>The default is to poll forever for incoming
+events.  Timeout is in milliseconds, if specified.</p>
+<dl class="docutils">
+<dt>timeout</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int [default: None]</span><dd>The timeout (in milliseconds) to wait for an event. If unspecified
+(or secified None), will wait forever for an event.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int) [default: POLLIN]</span><dd>The event flags to poll for (any combination of POLLIN|POLLOUT).
+The default is to check for incoming events (POLLIN).</dd>
+</dl>
+<dl class="docutils">
+<dt>events</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bitfield (int)</span><dd>The events that are ready and waiting.  Will be 0 if no events were ready
+by the time timeout was reached.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.recv_json">
+<code class="descname">recv_json</code><span class="sig-paren">(</span><em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.recv_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>receive a Python object as a message using json to serialize</p>
+<dl class="docutils">
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+</dl>
+<dl class="docutils">
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object that arrives as a message.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.recv_multipart">
+<code class="descname">recv_multipart</code><span class="sig-paren">(</span><em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.recv_multipart" title="Permalink to this definition">¶</a></dt>
+<dd><p>receive a multipart message as a list of bytes or Frame objects</p>
+<dl class="docutils">
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any supported flag: NOBLOCK. If NOBLOCK is set, this method
+will raise a ZMQError with EAGAIN if a message is not ready.
+If NOBLOCK is not set, then this method will block until a
+message arrives.</dd>
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the message frame(s) be received in a copying or non-copying manner?
+If False a Frame object is returned for each part, if True a copy of
+the bytes is made for each frame.</dd>
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the message frame(s) be tracked for notification that ZMQ has
+finished with it? (ignored if copy=True)</dd>
+</dl>
+<dl class="docutils">
+<dt>msg_parts</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">list</span><dd>A list of frames in the multipart message; either Frames or bytes,
+depending on <cite>copy</cite>.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.recv_pyobj">
+<code class="descname">recv_pyobj</code><span class="sig-paren">(</span><em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.recv_pyobj" title="Permalink to this definition">¶</a></dt>
+<dd><p>receive a Python object as a message using pickle to serialize</p>
+<dl class="docutils">
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+</dl>
+<dl class="docutils">
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object that arrives as a message.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.recv_string">
+<code class="descname">recv_string</code><span class="sig-paren">(</span><em>flags=0</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.recv_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>receive a unicode string, as sent by send_string</p>
+<dl class="docutils">
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
+</dl>
+<dl class="docutils">
+<dt>s</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The Python unicode string that arrives as encoded bytes.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.recv_unicode">
+<code class="descname">recv_unicode</code><span class="sig-paren">(</span><em>flags=0</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.recv_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>receive a unicode string, as sent by send_string</p>
+<dl class="docutils">
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid recv flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
+</dl>
+<dl class="docutils">
+<dt>s</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The Python unicode string that arrives as encoded bytes.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.send_json">
+<code class="descname">send_json</code><span class="sig-paren">(</span><em>obj</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.send_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>send a Python object as a message using json to serialize</p>
+<dl class="docutils">
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid send flag.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.send_multipart">
+<code class="descname">send_multipart</code><span class="sig-paren">(</span><em>msg_parts</em>, <em>flags=0</em>, <em>copy=True</em>, <em>track=False</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.send_multipart" title="Permalink to this definition">¶</a></dt>
+<dd><p>send a sequence of buffers as a multipart message</p>
+<dl class="docutils">
+<dt>msg_parts</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">iterable</span><dd>A sequence of objects to send as a multipart message. Each element
+can be any sendable object (Frame, bytes, buffer-providers)</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>SNDMORE is handled automatically for frames before the last.</dd>
+<dt>copy</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the frame(s) be sent in a copying or non-copying manner.</dd>
+<dt>track</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Should the frame(s) be tracked for notification that ZMQ has
+finished with it (ignored if copy=True).</dd>
+</dl>
+<p>None : if copy or not track
+MessageTracker : if track and not copy</p>
+<blockquote>
+<div>a MessageTracker object, whose <cite>pending</cite> property will
+be True until the last send is completed.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.send_pyobj">
+<code class="descname">send_pyobj</code><span class="sig-paren">(</span><em>obj</em>, <em>flags=0</em>, <em>protocol=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.send_pyobj" title="Permalink to this definition">¶</a></dt>
+<dd><p>send a Python object as a message using pickle to serialize</p>
+<dl class="docutils">
+<dt>obj</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python object</span><dd>The Python object to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Any valid send flag.</dd>
+<dt>protocol</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The pickle protocol number to use. Default of -1 will select
+the highest supported number. Use 0 for multiple platform
+support.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.send_string">
+<code class="descname">send_string</code><span class="sig-paren">(</span><em>u</em>, <em>flags=0</em>, <em>copy=False</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.send_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>send a Python unicode string as a message with an encoding</p>
+<p>0MQ communicates with raw bytes, so you must encode/decode
+text (unicode on py2, str on py3) around 0MQ.</p>
+<dl class="docutils">
+<dt>u</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span><dd>The unicode string to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any valid send flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.send_unicode">
+<code class="descname">send_unicode</code><span class="sig-paren">(</span><em>u</em>, <em>flags=0</em>, <em>copy=False</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.send_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>send a Python unicode string as a message with an encoding</p>
+<p>0MQ communicates with raw bytes, so you must encode/decode
+text (unicode on py2, str on py3) around 0MQ.</p>
+<dl class="docutils">
+<dt>u</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Python unicode string (unicode on py2, str on py3)</span><dd>The unicode string to send.</dd>
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span><dd>Any valid send flag.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str [default: &#8216;utf-8&#8217;]</span><dd>The encoding to be used</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.set_hwm">
+<code class="descname">set_hwm</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.set_hwm" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the High Water Mark</p>
+<p>On libzmq ≥ 3.x, this sets <em>both</em> SNDHWM and RCVHWM</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.set_string">
+<code class="descname">set_string</code><span class="sig-paren">(</span><em>option</em>, <em>optval</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.set_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>set socket options with a unicode object</p>
+<p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+UNSUBSCRIBE, IDENTITY</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.setsockopt">
+<code class="descname">setsockopt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.setsockopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>s.set(option, optval)</p>
+<p>Set socket options.</p>
+<p>See the 0MQ API documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd><p class="first">The option to set.  Available values will depend on your
+version of libzmq.  Examples include:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">zmq</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">UNSUBSCRIBE</span><span class="p">,</span> <span class="n">IDENTITY</span><span class="p">,</span> <span class="n">HWM</span><span class="p">,</span> <span class="n">LINGER</span><span class="p">,</span> <span class="n">FD</span>
+</pre></div>
+</div>
+</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or bytes</span><dd>The value of the option to set.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.setsockopt_string">
+<code class="descname">setsockopt_string</code><span class="sig-paren">(</span><em>option</em>, <em>optval</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.setsockopt_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>set socket options with a unicode object</p>
+<p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+UNSUBSCRIBE, IDENTITY</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="zmq.Socket.setsockopt_unicode">
+<code class="descname">setsockopt_unicode</code><span class="sig-paren">(</span><em>option</em>, <em>optval</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Socket.setsockopt_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>set socket options with a unicode object</p>
+<p>This is simply a wrapper for setsockopt to protect from encoding ambiguity.</p>
+<p>See the 0MQ documentation for details on specific options.</p>
+<dl class="docutils">
+<dt>option</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The name of the option to set. Can be any of: SUBSCRIBE, 
+UNSUBSCRIBE, IDENTITY</dd>
+<dt>optval</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">unicode string (unicode on py2, str on py3)</span><dd>The value of the option to set.</dd>
+<dt>encoding</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">str</span><dd>The encoding to be used, default is utf8</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="zmq.Poller">
@@ -778,8 +1152,8 @@ REQ, REP, PUB, SUB, PAIR, DEALER, ROUTER, PULL, PUSH, XSUB, XPUB.</dd>
 <code class="descname">poll</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Poller.poll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Poll the registered 0MQ or native fds for I/O.</p>
 <dl class="docutils">
-<dt>timeout <span class="classifier-delimiter">:</span> <span class="classifier">float, int</span></dt>
-<dd>The timeout in milliseconds. If None, no <cite>timeout</cite> (infinite). This
+<dt>timeout</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, int</span><dd>The timeout in milliseconds. If None, no <cite>timeout</cite> (infinite). This
 is in milliseconds to be compatible with <code class="docutils literal"><span class="pre">select.poll()</span></code>. The
 underlying zmq_poll uses microseconds and we convert to that in
 this function.</dd>
@@ -792,11 +1166,11 @@ this function.</dd>
 <dd><p>Register a 0MQ socket or native fd for I/O monitoring.</p>
 <p>register(s,0) is equivalent to unregister(s).</p>
 <dl class="docutils">
-<dt>socket <span class="classifier-delimiter">:</span> <span class="classifier">zmq.Socket or native socket</span></dt>
-<dd>A zmq.Socket or any Python object having a <code class="docutils literal"><span class="pre">fileno()</span></code> 
+<dt>socket</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">zmq.Socket or native socket</span><dd>A zmq.Socket or any Python object having a <code class="docutils literal"><span class="pre">fileno()</span></code> 
 method that returns a valid file descriptor.</dd>
-<dt>flags <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The events to watch for.  Can be POLLIN, POLLOUT or POLLIN|POLLOUT.
+<dt>flags</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The events to watch for.  Can be POLLIN, POLLOUT or POLLIN|POLLOUT.
 If <cite>flags=0</cite>, socket will be unregistered.</dd>
 </dl>
 </dd></dl>
@@ -806,8 +1180,8 @@ If <cite>flags=0</cite>, socket will be unregistered.</dd>
 <code class="descname">unregister</code><span class="sig-paren">(</span><em>socket</em><span class="sig-paren">)</span><a class="headerlink" href="#zmq.Poller.unregister" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a 0MQ socket or native fd for I/O monitoring.</p>
 <dl class="docutils">
-<dt>socket <span class="classifier-delimiter">:</span> <span class="classifier">Socket</span></dt>
-<dd>The socket instance to stop polling.</dd>
+<dt>socket</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Socket</span><dd>The socket instance to stop polling.</dd>
 </dl>
 </dd></dl>
 
@@ -854,21 +1228,18 @@ If <cite>flags=0</cite>, socket will be unregistered.</dd>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/modules/zmq.txt"
+      <li><a href="../_sources/modules/zmq.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -890,14 +1261,14 @@ If <cite>flags=0</cite>, socket will be unregistered.</dd>
         <li class="right" >
           <a href="wsgi.html" title="wsgi – WSGI server"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../modules.html" >Module Reference</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Eventlet 0.20.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../modules.html" >Module Reference</a> &#187;</li> 
       </ul>
     </div>
 
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2005-2010, Eventlet Contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2005-2010, Eventlet Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
