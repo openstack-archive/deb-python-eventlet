@@ -6,9 +6,7 @@
 
 .. currentmodule:: eventlet.green.zmq
 
-.. autofunction:: Context
-
-.. autoclass:: _Context
+.. autoclass:: Context
     :show-inheritance:
 
     .. automethod:: socket
@@ -29,12 +27,12 @@
 :mod:`pyzmq <zmq>` [1]_ Is a python binding to the C++ ØMQ [2]_ library written in Cython [3]_. The following is
 auto generated :mod:`pyzmq's <zmq>` from documentation.
 
-.. autoclass:: zmq.core.context.Context
+.. autoclass:: zmq.Context
     :members:
 
-.. autoclass:: zmq.core.socket.Socket
+.. autoclass:: zmq.Socket
 
-.. autoclass:: zmq.core.poll.Poller
+.. autoclass:: zmq.Poller
     :members:
 
 
