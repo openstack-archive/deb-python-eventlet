@@ -20,13 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.from eventlet.support import greenlets as greenlet
 
+import functools
+import inspect
+
 from eventlet.support import greenlets as greenlet
 from eventlet.hubs import get_hub
 
-__all__ = ['Timeout',
-           'with_timeout']
+__all__ = ['Timeout', 'with_timeout', 'wrap_is_timeout', 'is_timeout']
 
-_NONE = object()
+_MISSING = object()
 
 # deriving from BaseException so that "except Exception as e" doesn't catch
 # Timeout exceptions.
@@ -128,20 +130,57 @@ class Timeout(BaseException):
         if value is self and self.exception is False:
             return True
 
+    @property
+    def is_timeout(self):
+        return True
+
 
 def with_timeout(seconds, function, *args, **kwds):
     """Wrap a call to some (yielding) function with a timeout; if the called
     function fails to return before the timeout, cancel it and return a flag
     value.
     """
-    timeout_value = kwds.pop("timeout_value", _NONE)
+    timeout_value = kwds.pop("timeout_value", _MISSING)
     timeout = Timeout(seconds)
     try:
         try:
             return function(*args, **kwds)
         except Timeout as ex:
-            if ex is timeout and timeout_value is not _NONE:
+            if ex is timeout and timeout_value is not _MISSING:
                 return timeout_value
             raise
     finally:
         timeout.cancel()
+
+
+def wrap_is_timeout(base):
+    '''Adds `.is_timeout=True` attribute to objects returned by `base()`.
+
+    When `base` is class, it returns a subclass with read-only property.
+    Otherwise, it returns a function that sets attribute on result of `base()` call.
+
+    Wrappers make best effort to be transparent.
+    '''
+    if inspect.isclass(base):
+        class wrapped(base):
+            is_timeout = property(lambda _: True)
+
+        for k in functools.WRAPPER_ASSIGNMENTS:
+            v = getattr(base, k, _MISSING)
+            if v is not _MISSING:
+                try:
+                    setattr(wrapped, k, v)
+                except AttributeError:
+                    pass
+        return wrapped
+
+    @functools.wraps(base)
+    def fun(*args, **kwargs):
+        ex = base(*args, **kwargs)
+        ex.is_timeout = True
+        return ex
+    return fun
+
+
+def is_timeout(obj):
+    return bool(getattr(obj, 'is_timeout', False))

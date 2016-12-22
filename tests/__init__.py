@@ -346,6 +346,11 @@ def run_isolated(path, prefix='tests/isolated/', env=None, args=None, timeout=No
     assert ok, 'Expected single line "pass" in stdout'
 
 
+def check_is_timeout(obj):
+    value_text = getattr(obj, 'is_timeout', '(missing)')
+    assert obj.is_timeout, 'type={0} str={1} .is_timeout={2}'.format(type(obj), str(obj), value_text)
+
+
 certificate_file = os.path.join(os.path.dirname(__file__), 'test_server.crt')
 private_key_file = os.path.join(os.path.dirname(__file__), 'test_server.key')
 
