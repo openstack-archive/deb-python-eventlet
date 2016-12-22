@@ -23,6 +23,8 @@ if os.environ.get('EVENTLET_IMPORT_VERSION_ONLY') != '1':
 
     Timeout = timeout.Timeout
     with_timeout = timeout.with_timeout
+    wrap_is_timeout = timeout.wrap_is_timeout
+    is_timeout = timeout.is_timeout
 
     GreenPool = greenpool.GreenPool
     GreenPile = greenpool.GreenPile

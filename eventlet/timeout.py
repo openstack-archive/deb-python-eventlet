@@ -20,11 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.from eventlet.support import greenlets as greenlet
 
+import functools
+
 from eventlet.support import greenlets as greenlet
 from eventlet.hubs import get_hub
 
-__all__ = ['Timeout',
-           'with_timeout']
+__all__ = ['Timeout', 'with_timeout', 'wrap_is_timeout']
 
 _NONE = object()
 
@@ -128,6 +129,10 @@ class Timeout(BaseException):
         if value is self and self.exception is False:
             return True
 
+    @property
+    def is_timeout(self):
+        return True
+
 
 def with_timeout(seconds, function, *args, **kwds):
     """Wrap a call to some (yielding) function with a timeout; if the called
@@ -145,3 +150,16 @@ def with_timeout(seconds, function, *args, **kwds):
             raise
     finally:
         timeout.cancel()
+
+
+def wrap_is_timeout(base):
+    @functools.wraps(base)
+    def wrapped(*args, **kwargs):
+        ex = base(*args, **kwargs)
+        ex.is_timeout = True
+        return ex
+    return wrapped
+
+
+def is_timeout(obj):
+    return bool(getattr(obj, 'is_timeout', None))
