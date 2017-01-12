@@ -1,12 +1,14 @@
 python-eventlet (0.19.0-5) unstable; urgency=medium
 
+  * Team upload.
+
   [ Ondřej Nový ]
   * Bumped debhelper version to 10
 
-  [ Thomas Goirand ]
-  * Add remove-udp-tests-in-greendns-tests.patch to fix FTBFS (Closes: #850508)
+  [ Ondřej Kobližek ]
+  * Patched test_getaddrinfo due netbase update (Closes: #850508)
 
- -- Thomas Goirand <zigo@debian.org>  Tue, 10 Jan 2017 15:00:08 +0100
+ -- Ondřej Kobližek <koblizeko@gmail.com>  Thu, 12 Jan 2017 16:27:04 +0100
 
 python-eventlet (0.19.0-4) unstable; urgency=medium
 
