@@ -6,4 +6,4 @@ remove-networking-tests.patch
 greendns_tests_fix.patch
 remove-test_import_patched_defaults.patch
 patch-out-intersphinx.patch
-remove-udp-tests-in-greendns-tests.patch
+fix-FTBFS-test_getaddrinfo.patch
