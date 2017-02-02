@@ -30,6 +30,7 @@ gethostbyname = greendns.gethostbyname
 getaddrinfo = greendns.getaddrinfo
 gethostbyname_ex = greendns.gethostbyname_ex
 getnameinfo = greendns.getnameinfo
+del greendns
 
 
 def create_connection(address,
