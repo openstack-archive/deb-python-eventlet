@@ -1,0 +1,8 @@
+Code-Review+2: Thomas Goirand <thomas@goirand.fr>
+Workflow+1: Thomas Goirand <thomas@goirand.fr>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 16 Mar 2017 09:38:49 +0000
+Reviewed-on: https://review.openstack.org/446385
+Project: openstack/deb-python-eventlet
+Branch: refs/heads/debian/newton
