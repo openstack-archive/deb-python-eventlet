@@ -1,3 +1,10 @@
+python-eventlet (0.19.0-6) unstable; urgency=medium
+
+  * Disable test_server_connection_timeout_exception, as it has been reported
+    that it isn't deterministric and FTBFS randomly (Closes: #857893).
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 16 Mar 2017 09:48:32 +0100
+
 python-eventlet (0.19.0-5) unstable; urgency=medium
 
   * Team upload.

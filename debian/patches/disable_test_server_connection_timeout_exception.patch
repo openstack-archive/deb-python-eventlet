@@ -1,0 +1,27 @@
+Description: Disable test_server_connection_timeout_exception()
+ As per the bug report, the test is non-deterministic. Therefore,
+ remove it it.
+Author: Thomas Goirand <zigo@debian.org>
+Bug-Debian: https://bugs.debian.org/857893
+Forwarded: no
+Last-Update: 2017-03-16
+
+--- python-eventlet-0.19.0.orig/tests/wsgi_test.py
++++ python-eventlet-0.19.0/tests/wsgi_test.py
+@@ -1464,11 +1464,11 @@ class TestHttpd(_TestBase):
+         request_thread.wait()
+         server_sock.close()
+ 
+-    def test_server_connection_timeout_exception(self):
+-        # Handle connection socket timeouts
+-        # https://bitbucket.org/eventlet/eventlet/issue/143/
+-        # Runs tests.wsgi_test_conntimeout in a separate process.
+-        tests.run_isolated('wsgi_connection_timeout.py')
++#    def test_server_connection_timeout_exception(self):
++#        # Handle connection socket timeouts
++#        # https://bitbucket.org/eventlet/eventlet/issue/143/
++#        # Runs tests.wsgi_test_conntimeout in a separate process.
++#        tests.run_isolated('wsgi_connection_timeout.py')
+ 
+     def test_server_socket_timeout(self):
+         self.spawn_server(socket_timeout=0.1)
