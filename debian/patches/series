@@ -7,3 +7,4 @@ greendns_tests_fix.patch
 remove-test_import_patched_defaults.patch
 patch-out-intersphinx.patch
 fix-FTBFS-test_getaddrinfo.patch
+disable_test_server_connection_timeout_exception.patch
