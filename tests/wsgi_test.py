@@ -557,8 +557,8 @@ class TestHttpd(_TestBase):
         def server(sock, site, log):
             try:
                 serv = wsgi.Server(sock, sock.getsockname(), site, log)
-                client_socket = sock.accept()
-                serv.process_request(client_socket)
+                client_socket, addr = sock.accept()[:2]
+                serv.process_request(client_socket, addr)
                 return True
             except Exception:
                 traceback.print_exc()
@@ -1471,9 +1471,9 @@ class TestHttpd(_TestBase):
             sock.close()
 
         request_thread = eventlet.spawn(make_request)
-        server_conn = server_sock.accept()
+        server_conn, addr = server_sock.accept()[:2]
         # Next line must not raise IOError -32 Broken pipe
-        server.process_request(server_conn)
+        server.process_request(server_conn, addr)
         request_thread.wait()
         server_sock.close()
 

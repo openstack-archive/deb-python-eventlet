@@ -318,6 +318,12 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
     # so before going back to unbuffered, remove any usage of `writelines`.
     wbufsize = 16 << 10
 
+    def __init__(self, *args, **kwargs):
+        self.control = kwargs.pop('control', None)
+        if self.control is None:
+            self.control = eventlet.queue.LightQueue(1)
+        super(HttpProtocol, self).__init__(*args, **kwargs)
+
     def setup(self):
         # overriding SocketServer.setup to correctly handle SSL.Connection objects
         conn = self.connection = self.request
@@ -343,12 +349,12 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
                 raise NotImplementedError(
                     '''eventlet.wsgi doesn't support sockets of type {0}'''.format(type(conn)))
 
-    def handle_one_request(self):
-        if self.server.max_http_version:
-            self.protocol_version = self.server.max_http_version
+    def _read_request_line(self):
+        self.raw_requestline = ''
 
         if self.rfile.closed:
             self.close_connection = 1
+            self.control.put('close')
             return
 
         try:
@@ -365,7 +371,15 @@ class HttpProtocol(BaseHTTPServer.BaseHTTPRequestHandler):
             if support.get_errno(e) not in BAD_SOCK:
                 raise
             self.raw_requestline = ''
+        self.control.put(None)
 
+    def handle_one_request(self):
+        if self.server.max_http_version:
+            self.protocol_version = self.server.max_http_version
+
+        request_line_reader = eventlet.spawn(self._read_request_line)
+        self.control.get()
+        request_line_reader.kill()
         if not self.raw_requestline:
             self.close_connection = 1
             return
@@ -736,17 +750,16 @@ class Server(BaseHTTPServer.HTTPServer):
             d.update(self.environ)
         return d
 
-    def process_request(self, sock_params):
+    def process_request(self, sock, address, control=None):
         # The actual request handling takes place in __init__, so we need to
         # set minimum_chunk_size before __init__ executes and we don't want to modify
         # class variable
-        sock, address = sock_params[:2]
         proto = new(self.protocol)
         if self.minimum_chunk_size is not None:
             proto.minimum_chunk_size = self.minimum_chunk_size
         proto.capitalize_response_headers = self.capitalize_response_headers
         try:
-            proto.__init__(sock, address, self)
+            proto.__init__(sock, address, self, control=control)
         except socket.timeout:
             # Expected exceptions are not exceptional
             sock.close()
@@ -893,19 +906,26 @@ def server(sock, site,
     else:
         pool = eventlet.GreenPool(max_size)
 
-    if not (hasattr(pool, 'spawn_n') and hasattr(pool, 'waitall')):
+    if not (hasattr(pool, 'spawn') and hasattr(pool, 'waitall')):
         raise AttributeError('''\
-eventlet.wsgi.Server pool must provide methods: `spawn_n`, `waitall`.
+eventlet.wsgi.Server pool must provide methods: `spawn`, `waitall`.
 If unsure, use eventlet.GreenPool.''')
+
+    control_map = {}
+
+    def _clean_control(_, addr):
+        control_map.pop(addr, None)
 
     try:
         serv.log.info('({0}) wsgi starting up on {1}'.format(serv.pid, socket_repr(sock)))
         while is_accepting:
             try:
-                client_socket = sock.accept()
-                client_socket[0].settimeout(serv.socket_timeout)
-                serv.log.debug('({0}) accepted {1!r}'.format(serv.pid, client_socket[1]))
-                pool.spawn_n(serv.process_request, client_socket)
+                client_socket, client_addr = sock.accept()[:2]
+                client_socket.settimeout(serv.socket_timeout)
+                serv.log.debug('({0}) accepted {1!r}'.format(serv.pid, client_addr))
+                control_map[client_addr] = control = eventlet.queue.LightQueue(2)
+                (pool.spawn(serv.process_request, client_socket, client_addr, control)
+                    .link(_clean_control, client_addr))
             except ACCEPT_EXCEPTIONS as e:
                 if support.get_errno(e) not in ACCEPT_ERRNO:
                     raise
@@ -913,6 +933,8 @@ If unsure, use eventlet.GreenPool.''')
                 serv.log.info('wsgi exiting')
                 break
     finally:
+        for control in six.itervalues(control_map):
+            control.put('close')
         pool.waitall()
         serv.log.info('({0}) wsgi exited, is_accepting={1}'.format(serv.pid, is_accepting))
         try:
