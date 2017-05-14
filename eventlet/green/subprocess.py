@@ -133,3 +133,7 @@ if hasattr(subprocess_orig, 'check_output'):
     __patched__.append('check_output')
     check_output = patched_function(subprocess_orig.check_output)
 del patched_function
+
+# Keep exceptions identity.
+# https://github.com/eventlet/eventlet/issues/413
+CalledProcessError = subprocess_orig.CalledProcessError

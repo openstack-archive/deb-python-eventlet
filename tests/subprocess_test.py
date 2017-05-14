@@ -93,3 +93,13 @@ def test_check_call_without_timeout_works():
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
+
+
+def test_exception_identity():
+    # https://github.com/eventlet/eventlet/issues/413
+    # green module must keep exceptions classes as stdlib version
+    cases = (
+        'CalledProcessError',
+    )
+    for c in cases:
+        assert getattr(subprocess, c) is getattr(original_subprocess, c), c
